@@ -7,6 +7,6 @@ import retrofit2.http.POST
 interface AuthService {
 
     // TODO: добавить запрос
-    @POST()
-    suspend fun getSms() : Response<ResponseAuth>
+//    @POST()
+//    suspend fun getSms() : Response<ResponseAuth>
 }

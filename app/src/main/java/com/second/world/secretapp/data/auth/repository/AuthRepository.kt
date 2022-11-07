@@ -8,9 +8,9 @@ import javax.inject.Inject
 
 class AuthRepository @Inject constructor(private val remoteDataSource: AuthRemoteDataSource) {
 
-    suspend fun getSms(phoneNumber : String) : BaseResult<ResponseAuth, Failure> {
-        return remoteDataSource.getSms()
-    }
+//    suspend fun getSms(phoneNumber : String) : BaseResult<ResponseAuth, Failure> {
+//        return remoteDataSource.getSms()
+//    }
 
 
 }

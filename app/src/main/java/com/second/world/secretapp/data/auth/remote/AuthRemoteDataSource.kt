@@ -11,9 +11,9 @@ class AuthRemoteDataSource @Inject constructor(
     private val responseWrapper: ResponseWrapper,
 ) {
 
-    suspend fun getSms() : BaseResult<ResponseAuth, Failure> =
-        responseWrapper.handleResponse {
-            api.getSms()
-        }
+//    suspend fun getSms() : BaseResult<ResponseAuth, Failure> =
+//        responseWrapper.handleResponse {
+//            api.getSms()
+//        }
 
 }
