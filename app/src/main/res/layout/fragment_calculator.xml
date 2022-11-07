@@ -11,20 +11,35 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-
         android:gravity="bottom"
         android:orientation="vertical"
         android:padding="8dp">
 
         <TextView
+            android:id="@+id/finalDataText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:gravity="end"
             android:maxLines="1"
-            android:text="0"
+            android:autoSizeTextType="uniform"
+            android:text=""
             android:textColor="@color/black"
-            android:textSize="35dp" />
+            android:textSize="20sp"
+            tools:targetApi="o" />
+
+        <TextView
+            android:id="@+id/mainText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:gravity="end"
+            android:maxLines="1"
+            android:autoSizeTextType="uniform"
+            android:text="@string/_0"
+            android:textColor="@color/black"
+            android:textSize="35sp"
+            tools:targetApi="o" />
 
     </LinearLayout>
 
@@ -44,9 +59,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:ignore="NestedWeights">
 
             <TextView
                 android:id="@+id/clear"
@@ -56,8 +71,8 @@
                 android:gravity="center"
                 android:textColor="#E77A07"
                 android:textStyle="bold"
-                android:text="AC"
-                android:textSize="25dp" />
+                android:text="@string/ac"
+                android:textSize="25sp" />
 
             <ImageView
                 android:id="@+id/backspace"
@@ -67,7 +82,8 @@
                 android:gravity="center"
                 android:padding="22dp"
                 android:src="@drawable/ic_baseline_backspace_24"
-                android:text="" />
+                android:text=""
+                android:contentDescription="@string/backspace" />
 
             <TextView
                 android:id="@+id/percent"
@@ -77,8 +93,8 @@
                 android:gravity="center"
                 android:textColor="#E77A07"
                 android:textStyle="bold"
-                android:text="%"
-                android:textSize="25dp" />
+                android:text="@string/percent"
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/division"
@@ -88,8 +104,8 @@
                 android:gravity="center"
                 android:textColor="#E77A07"
                 android:textStyle="bold"
-                android:text="/"
-                android:textSize="25dp" />
+                android:text="@string/division"
+                android:textSize="25sp" />
 
         </LinearLayout>
 
@@ -106,10 +122,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="7"
+                android:text="@string/_7"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/btn8"
@@ -117,10 +133,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="8"
+                android:text="@string/_8"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/btn9"
@@ -129,10 +145,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="9"
+                android:text="@string/_9"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
 
             <ImageView
                 android:id="@+id/multiply"
@@ -143,7 +159,7 @@
                 android:src="@drawable/ic_baseline_close_24"
                 android:padding="23dp"
                 android:textStyle="bold"
-                 />
+                android:contentDescription="@string/times" />
         </LinearLayout>
 
         <LinearLayout
@@ -158,10 +174,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="4"
+                android:text="@string/_4"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/btn5"
@@ -169,10 +185,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="5"
+                android:text="@string/_5"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/btn6"
@@ -180,10 +196,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="6"
+                android:text="@string/_6"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/minus"
@@ -191,10 +207,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="-"
+                android:text="@string/minus"
                 android:textColor="#E77A07"
                 android:textStyle="bold"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -210,10 +226,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="1"
+                android:text="@string/_1"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/btn2"
@@ -221,10 +237,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="2"
+                android:text="@string/_2"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/btn3"
@@ -232,10 +248,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="3"
+                android:text="@string/_3"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/plus"
@@ -243,10 +259,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="+"
+                android:text="@string/plus"
                 android:textColor="#E77A07"
                 android:textStyle="bold"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -262,7 +278,7 @@
                 android:gravity="center"
                 android:text=""
                 android:textColor="@color/black"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/btn0"
@@ -270,10 +286,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="0"
+                android:text="@string/string_0"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/comma"
@@ -281,10 +297,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text=","
+                android:text="@string/comma"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/equal"
@@ -292,14 +308,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="="
+                android:text="@string/equal"
                 android:textColor="#E77A07"
                 android:textStyle="bold"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
         </LinearLayout>
-
-
     </LinearLayout>
-
-
 </LinearLayout>
