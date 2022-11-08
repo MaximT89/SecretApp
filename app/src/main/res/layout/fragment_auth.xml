@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:mask="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,9 +12,9 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:padding="20dp"
-        android:text="Авторизация"
+        android:text="@string/auth"
         android:textColor="@color/black"
-        android:textSize="25dp"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,6 +32,8 @@
             android:id="@+id/phoneRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="visible"
+            tools:visibility="gone"
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -46,7 +47,7 @@
                     android:id="@+id/phoneEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Номер телефона"
+                    android:hint="@string/phone_number"
                     android:inputType="phone"/>
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -56,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="8dp"
                 android:layout_height="wrap_content"
-                android:text="получить смс с паролем"/>
+                android:text="@string/get_sms_with_code"/>
 
 
         </LinearLayout>
@@ -65,6 +66,7 @@
             android:id="@+id/smsRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            tools:visibility="gone"
             android:visibility="gone"
             android:orientation="vertical">
 
@@ -78,7 +80,7 @@
                     android:id="@+id/smsEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Код из sms"
+                    android:hint="@string/sms"
                     android:inputType="phone"/>
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -88,14 +90,77 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="8dp"
                 android:layout_height="wrap_content"
-                android:text="войти"/>
+                android:text="@string/btn_open"/>
 
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/changeSecretPinRoot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:visibility="visible"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxBackgroundMode="outline"
+                app:boxBackgroundColor="@color/white">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/firstNewPin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/edit_first_new_pin"
+                    android:inputType="phone"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxBackgroundMode="outline"
+                app:boxBackgroundColor="@color/white">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/secondNewPin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/second_edit_pin"
+                    android:inputType="phone"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btnUpdateNewPin"
+                android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_change_pin_code"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/info_for_pin"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/errorText"
+            android:layout_width="match_parent"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            tools:visibility="gone"
+            tools:text="Неверно введен телефон"
+            android:layout_height="wrap_content"/>
+
         <TextView
             android:id="@+id/textNewSms"
             android:visibility="gone"
+            tools:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -106,7 +171,31 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="92dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <ProgressBar
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            tools:layout_editor_absoluteX="158dp"
+            tools:layout_editor_absoluteY="538dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/load"
+            android:textSize="25sp" />
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

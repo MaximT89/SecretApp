@@ -24,4 +24,14 @@
     <string name="equal">=</string>
     <string name="times">times</string>
     <string name="backspace">backspace</string>
+    <string name="load">Загрузка…</string>
+    <string name="auth">Авторизация</string>
+    <string name="sms">Код из sms</string>
+    <string name="btn_change_pin_code">изменить PIN-код</string>
+    <string name="edit_first_new_pin">Введите новый PIN-код</string>
+    <string name="info_for_pin">Новый Pin-код должен содержать от 3 до 8 цифр и это не должно быть повторение одной цифры, например: 8888 или 11111</string>
+    <string name="second_edit_pin">Повторите PIN-код</string>
+    <string name="btn_open">войти</string>
+    <string name="get_sms_with_code">получить смс с паролем</string>
+    <string name="phone_number">Номер телефона</string>
 </resources>

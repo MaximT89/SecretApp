@@ -1,7 +1,12 @@
 package com.second.world.secretapp.ui.screens.auth_screen
 
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import com.second.world.secretapp.core.bases.BaseFragment
+import com.second.world.secretapp.core.extension.click
+import com.second.world.secretapp.core.extension.hide
+import com.second.world.secretapp.core.extension.show
+import com.second.world.secretapp.core.navigation.Destinations
 import com.second.world.secretapp.databinding.FragmentAuthBinding
 import dagger.hilt.android.AndroidEntryPoint
 import ru.tinkoff.decoro.MaskImpl
@@ -10,39 +15,78 @@ import ru.tinkoff.decoro.watchers.FormatWatcher
 import ru.tinkoff.decoro.watchers.MaskFormatWatcher
 
 @AndroidEntryPoint
-class AuthFragment : BaseFragment<FragmentAuthBinding, AuthViewModel>(FragmentAuthBinding::inflate) {
+class AuthFragment :
+    BaseFragment<FragmentAuthBinding, AuthViewModel>(FragmentAuthBinding::inflate) {
     override val viewModel: AuthViewModel by viewModels()
 
-    override fun initView() = with(binding){
-
-//        btnToMain.click{
-//            log(phoneEditText.text.toString().filter { it.isDigit() })
-//        }
+    override fun initView() {
 
         val slots = UnderscoreDigitSlotsParser().parseSlots("(___) ___ __-__")
         val formatWatcher: FormatWatcher = MaskFormatWatcher(MaskImpl.createTerminated(slots))
-        formatWatcher.installOn(phoneEditText)
+        formatWatcher.installOn(binding.phoneEditText)
+
+        // телефон будет получен в формате 9536506580
+        binding.btnGetSms.click {
+            viewModel.getSms(binding.phoneEditText.text.toString().filter { it.isDigit() })
+        }
+
+        binding.btnCheckSms.click { viewModel.checkSmsCode(binding.smsEditText.text.toString()) }
     }
 
-    override fun initObservers() {
+    override fun initObservers() = with(binding) {
 
-//        viewModel.authState.observe { state ->
-//            when(state){
-//                is AuthState.Error -> {
-//
-//                }
-//                AuthState.Loading -> {
-//
-//                }
-//                is AuthState.NoInternet -> {
-//
-//                }
-//                is AuthState.SuccessAuth -> {
-//
-//                }
-//
-//                else -> {}
-//            }
-//        }
+        viewModel.authState.observe { state ->
+            when (state) {
+                is AuthState.Error -> {
+                    showError(visible = true, message = state.messageError)
+                    progressBar.hide()
+                }
+                AuthState.Loading -> {
+                    showRoot(progress = true)
+                    showError()
+                }
+                is AuthState.NoInternet -> {
+                    showError(visible = true, message = state.messageError)
+                }
+                is AuthState.SuccessAuth -> {
+                    showError()
+                    navigateTo(Destinations.AUTH_TO_MAIN.id)
+                }
+                is AuthState.SuccessGetSms -> {
+                    showRoot(smsRoot = true, phoneRoot = false)
+                    showError()
+                }
+                AuthState.ChangeSecretPin -> {
+                    showRoot(changeSecretPinRoot = true, phoneRoot = false)
+                    showError()
+                }
+            }
+        }
+    }
+
+    private fun showRoot(
+        smsRoot: Boolean = false,
+        phoneRoot: Boolean = true,
+        progress: Boolean = false,
+        changeSecretPinRoot : Boolean = false
+    ) {
+        if (smsRoot) binding.smsRoot.show()
+        else binding.smsRoot.hide()
+
+        if (phoneRoot) binding.phoneRoot.show()
+        else binding.phoneRoot.hide()
+
+        if (changeSecretPinRoot) binding.changeSecretPinRoot.show()
+        else binding.changeSecretPinRoot.hide()
+
+        if (progress) binding.progressBar.show()
+        else binding.progressBar.hide()
+    }
+
+    private fun showError(visible: Boolean = false, message: String = "") {
+        if (visible) binding.errorText.show()
+        else binding.errorText.hide()
+
+        binding.errorText.text = message
     }
 }

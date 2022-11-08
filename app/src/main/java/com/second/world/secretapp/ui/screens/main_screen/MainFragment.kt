@@ -16,5 +16,4 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(FragmentMa
     override fun initObservers() {
 
     }
-
 }
