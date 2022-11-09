@@ -13,6 +13,9 @@ class AppPrefs @Inject constructor(private val basePref: BaseSharedPreferences) 
 
         const val USER_SECRET_PIN = "user_secret_pin"
         const val DEFAULT_USER_SECRET_PIN = 555
+
+        const val TOKEN_API = "token_api"
+        const val DEFAULT_TOKEN_API = ""
     }
 
     fun loadUserIsAuth() =
@@ -33,6 +36,16 @@ class AppPrefs @Inject constructor(private val basePref: BaseSharedPreferences) 
 
     fun saveUserSecretPin(value: Int) {
         basePref.defaultPref().editMe { it.put(USER_SECRET_PIN to value) }
+    }
+
+    fun loadTokenApi() =
+        basePref.defaultPref().getString(
+            TOKEN_API,
+            DEFAULT_TOKEN_API
+        )
+
+    fun saveTokenApi(value: String) {
+        basePref.defaultPref().editMe { it.put(TOKEN_API to value) }
     }
 
 }

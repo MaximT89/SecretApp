@@ -1,10 +1,10 @@
 package com.second.world.secretapp.ui.screens.auth_screen
 
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import com.second.world.secretapp.core.bases.BaseFragment
 import com.second.world.secretapp.core.extension.click
 import com.second.world.secretapp.core.extension.hide
+import com.second.world.secretapp.core.extension.onlyDigits
 import com.second.world.secretapp.core.extension.show
 import com.second.world.secretapp.core.navigation.Destinations
 import com.second.world.secretapp.databinding.FragmentAuthBinding
@@ -21,16 +21,21 @@ class AuthFragment :
 
     override fun initView() {
 
-        val slots = UnderscoreDigitSlotsParser().parseSlots("(___) ___ __-__")
-        val formatWatcher: FormatWatcher = MaskFormatWatcher(MaskImpl.createTerminated(slots))
-        formatWatcher.installOn(binding.phoneEditText)
+        createPhoneMask()
 
         // телефон будет получен в формате 9536506580
         binding.btnGetSms.click {
-            viewModel.getSms(binding.phoneEditText.text.toString().filter { it.isDigit() })
+            viewModel.getSms(binding.phoneEditText.text.toString().onlyDigits())
         }
 
         binding.btnCheckSms.click { viewModel.checkSmsCode(binding.smsEditText.text.toString()) }
+
+        binding.btnUpdateNewPin.click {
+            viewModel.updateNewPin(
+                binding.firstNewPin.text.toString().onlyDigits(),
+                binding.secondNewPin.text.toString().onlyDigits()
+            )
+        }
     }
 
     override fun initObservers() = with(binding) {
@@ -68,7 +73,7 @@ class AuthFragment :
         smsRoot: Boolean = false,
         phoneRoot: Boolean = true,
         progress: Boolean = false,
-        changeSecretPinRoot : Boolean = false
+        changeSecretPinRoot: Boolean = false
     ) {
         if (smsRoot) binding.smsRoot.show()
         else binding.smsRoot.hide()
@@ -88,5 +93,11 @@ class AuthFragment :
         else binding.errorText.hide()
 
         binding.errorText.text = message
+    }
+
+    private fun createPhoneMask() {
+        val slots = UnderscoreDigitSlotsParser().parseSlots("(___) ___ __-__")
+        val formatWatcher: FormatWatcher = MaskFormatWatcher(MaskImpl.createTerminated(slots))
+        formatWatcher.installOn(binding.phoneEditText)
     }
 }

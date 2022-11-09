@@ -1,11 +1,13 @@
 package com.second.world.secretapp.ui.screens.auth_screen
 
+import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.second.world.secretapp.core.bases.BaseResult
 import com.second.world.secretapp.core.bases.BaseViewModel
 import com.second.world.secretapp.core.bases.Dispatchers
+import com.second.world.secretapp.core.extension.log
 import com.second.world.secretapp.data.app.local.AppPrefs
 import com.second.world.secretapp.data.auth.remote.model.ResponseAuth
 import com.second.world.secretapp.data.auth.repository.AuthRepository
@@ -97,6 +99,23 @@ class AuthViewModel @Inject constructor(
         val secretPin = appPrefs.loadUserSecretPin()
         if (secretPin == 555) return false
         return true
+    }
+
+    /**
+     * Валидация нового пин-кода
+     */
+    fun updateNewPin(firstPin: String, secondPin: String) {
+        if (TextUtils.isEmpty(firstPin) || TextUtils.isEmpty(secondPin)){
+            _authState.value = AuthState.Error("Введите новый pin-код")
+        } else if (firstPin != secondPin) {
+            _authState.value = AuthState.Error("Pin-коды не совпадают")
+        } else if (firstPin.length < 3 || firstPin.length > 8) {
+            _authState.value = AuthState.Error("Pin-код не соответствует длине (от 3 до 8 символов)")
+        } else if (firstPin.toCharArray().toSet().size == 1) {
+            _authState.value = AuthState.Error("Pin-код не может состоять из одной цифры")
+        } else {
+            appPrefs.saveUserSecretPin(firstPin.toInt())
+        }
     }
 }
 

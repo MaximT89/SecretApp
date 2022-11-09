@@ -33,6 +33,10 @@ fun updateText(view: TextView, message: Any) {
     view.text = message.toString()
 }
 
+fun String.onlyDigits() : String {
+    return filter { it.isDigit() }
+}
+
 fun View.show() {
     visibility = View.VISIBLE
 }
