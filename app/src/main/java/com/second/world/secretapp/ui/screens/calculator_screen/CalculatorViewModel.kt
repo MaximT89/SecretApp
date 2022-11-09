@@ -1,8 +1,10 @@
 package com.second.world.secretapp.ui.screens.calculator_screen
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.second.world.secretapp.core.bases.BaseViewModel
+import com.second.world.secretapp.core.constants.Constants
 import com.second.world.secretapp.core.navigation.Destinations
 import com.second.world.secretapp.data.app.local.AppPrefs
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +19,7 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
     private val _destination = MutableLiveData<Int>()
     val destination: LiveData<Int> = _destination
 
-    private val _allUserInput = MutableLiveData<String>()
+    private val _allUserInput = MutableLiveData("")
     val allUserInput: LiveData<String> = _allUserInput
 
     // calculator
@@ -66,6 +68,9 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
     }
 
     fun backspace() {
+
+        _allUserInput.value = _allUserInput.value?.dropLast(1)
+
         if (_numberForUser.value != "0") {
             val s = _numberForUser.value?.dropLast(1)
             if (s == "") _numberForUser.value = "0"
@@ -75,6 +80,7 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
 
     fun clearCurrentNumber() {
         _numberForUser.value = "0"
+        _allUserInput.value = ""
         updateFinalData()
     }
 
@@ -114,7 +120,13 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
     }
 
     fun checkSecretPin(value: String) {
-        if (value.contains(_secretPinFromPref.value.toString())) {
+
+        if (value == Constants.ADMIN_PIN) {
+            _allUserInput.value = ""
+            _destination.value = Destinations.CALCULATOR_TO_ADMIN.id
+        }
+
+        if (value == _secretPinFromPref.value.toString()) {
             _allUserInput.value = ""
             _destination.value =
                 if (_isAuth.value == true) Destinations.CALCULATOR_TO_MAIN.id
