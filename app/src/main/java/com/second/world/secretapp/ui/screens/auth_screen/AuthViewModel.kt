@@ -28,6 +28,20 @@ class AuthViewModel @Inject constructor(
 
     private var _smsCode = MutableLiveData<Int>()
 
+    init {
+        checkUserAuth()
+    }
+
+    private fun checkUserAuth() {
+        if(appPrefs.loadUserIsAuth()){
+            if (appPrefs.loadTokenApi() == "555") {
+                _authState.value = AuthState.ChangeSecretPin
+            } else {
+                _authState.value = AuthState.SuccessAuth
+            }
+        }
+    }
+
     // ТЕСТОВАЯ ЗАГЛУШКА
     // TODO: убрать после получения реального АПИ
     fun getSms(phone: String) {
@@ -86,10 +100,16 @@ class AuthViewModel @Inject constructor(
     fun checkSmsCode(userCode: String) {
         if (userCode == _smsCode.value.toString()) {
 
+            userIsAuth(true)
+
             if (checkUserSecretPin()) _authState.value = AuthState.SuccessAuth
             else _authState.value = AuthState.ChangeSecretPin
 
         } else _authState.value = AuthState.Error("Неверный код")
+    }
+
+    private fun userIsAuth(newStatus : Boolean) {
+        appPrefs.saveUserIsAuth(newStatus)
     }
 
     /**
@@ -115,6 +135,7 @@ class AuthViewModel @Inject constructor(
             _authState.value = AuthState.Error("Pin-код не может состоять из одной цифры")
         } else {
             appPrefs.saveUserSecretPin(firstPin.toInt())
+            _authState.value = AuthState.SuccessAuth
         }
     }
 }

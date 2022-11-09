@@ -30,4 +30,13 @@ class AdminViewModel @Inject constructor(
     private fun getToken() {
         _token.value = appPrefs.loadTokenApi()
     }
+
+    fun clearAllToDefault(){
+        appPrefs.saveTokenApi(AppPrefs.DEFAULT_TOKEN_API)
+        appPrefs.saveUserIsAuth(AppPrefs.DEFAULT_USER_IS_AUTH)
+        appPrefs.saveUserSecretPin(AppPrefs.DEFAULT_USER_SECRET_PIN)
+
+        getToken()
+        getSecretPin()
+    }
 }

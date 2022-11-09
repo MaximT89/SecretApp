@@ -19,6 +19,8 @@ class AdminFragment : BaseFragment<FragmentAdminBinding, AdminViewModel>(Fragmen
         btnCopySecretPin.click {  clipToBuffer(viewModel.secretPin.value.toString())  }
 
         btnBack.click { navigateTo(Destinations.ADMIN_TO_CALCULATOR.id) }
+
+        btnClearToDefault.click { viewModel.clearAllToDefault()}
     }
 
     override fun initObservers() = with(viewModel) {

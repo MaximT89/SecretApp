@@ -34,4 +34,8 @@
     <string name="btn_open">войти</string>
     <string name="get_sms_with_code">получить смс с паролем</string>
     <string name="phone_number">Номер телефона</string>
+    <string name="clear_all_settings_app">откатить все настройки</string>
+    <string name="main_screen_title">Управление API</string>
+    <string name="settings">Настройки</string>
+    <string name="logout">разлогиниться</string>
 </resources>

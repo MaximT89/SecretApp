@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:padding="20dp"
+        android:padding="10dp"
         android:text="@string/auth"
         android:textColor="@color/black"
         android:textSize="25sp"
