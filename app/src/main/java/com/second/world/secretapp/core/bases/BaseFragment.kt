@@ -1,6 +1,9 @@
 package com.second.world.secretapp.core.bases
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.appcompat.app.AlertDialog
@@ -55,6 +58,8 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
         initObservers()
         initCallbacks()
     }
+
+
 
     inline fun <reified T> readArguments(
         key: String,
@@ -177,6 +182,14 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
      */
     fun showSnackbar(message: String) {
         Snackbar.make(requireActivity(), binding.root, message, Snackbar.LENGTH_LONG).show()
+    }
+
+    fun clipToBuffer(str : String) {
+        val clipboard = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+        val clip = ClipData.newPlainText("Copied Text", str)
+        clipboard!!.setPrimaryClip(clip)
+
+        showSnackbar("Скопировано в буфер обмена")
     }
 
     /**

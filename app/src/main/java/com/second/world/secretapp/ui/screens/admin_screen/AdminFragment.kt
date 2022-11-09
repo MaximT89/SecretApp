@@ -14,9 +14,9 @@ class AdminFragment : BaseFragment<FragmentAdminBinding, AdminViewModel>(Fragmen
 
     override fun initView() = with(binding){
 
-        btnCopyToken.click {    }
+        btnCopyToken.click {  clipToBuffer(viewModel.token.value.toString())  }
 
-        btnCopySecretPin.click {    }
+        btnCopySecretPin.click {  clipToBuffer(viewModel.secretPin.value.toString())  }
 
         btnBack.click { navigateTo(Destinations.ADMIN_TO_CALCULATOR.id) }
     }
