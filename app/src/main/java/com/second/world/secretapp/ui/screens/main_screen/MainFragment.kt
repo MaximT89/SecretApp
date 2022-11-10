@@ -1,9 +1,5 @@
 package com.second.world.secretapp.ui.screens.main_screen
 
-import android.annotation.SuppressLint
-import android.content.res.Resources
-import android.graphics.Color
-import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.second.world.secretapp.R
@@ -11,11 +7,13 @@ import com.second.world.secretapp.core.bases.BaseFragment
 import com.second.world.secretapp.core.extension.click
 import com.second.world.secretapp.core.extension.hide
 import com.second.world.secretapp.core.extension.show
+import com.second.world.secretapp.core.navigation.Destinations
 import com.second.world.secretapp.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(FragmentMainBinding::inflate) {
+class MainFragment :
+    BaseFragment<FragmentMainBinding, MainViewModel>(FragmentMainBinding::inflate) {
     override val viewModel: MainViewModel by viewModels()
 
     override fun initView() = with(binding) {
@@ -25,19 +23,30 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(FragmentMa
         mainScreenRoot.click { showSetting(false) }
 
         btnCloseSettings.click { showSetting(false) }
+
+        btnLogout.click {
+            viewModel.logout()
+        }
     }
 
     private fun showSetting(status: Boolean) {
         if (status) {
             binding.settingRoot.show()
-            binding.mainScreenRoot.setBackgroundColor(ContextCompat.getColor(requireActivity(), R.color.gray))
+            binding.mainScreenRoot.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireActivity(),
+                    R.color.gray
+                )
+            )
         } else {
             binding.settingRoot.hide()
             binding.mainScreenRoot.setBackgroundColor(0)
         }
     }
 
-    override fun initObservers() {
-
+    override fun initObservers() = with(viewModel) {
+        userIsAuth.observe { isAuth ->
+            if (!isAuth) navigateTo(Destinations.MAIN_TO_AUTH.id)
+        }
     }
 }

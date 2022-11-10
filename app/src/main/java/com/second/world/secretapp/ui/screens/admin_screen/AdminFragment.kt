@@ -9,18 +9,27 @@ import com.second.world.secretapp.databinding.FragmentAdminBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AdminFragment : BaseFragment<FragmentAdminBinding, AdminViewModel>(FragmentAdminBinding::inflate) {
+class AdminFragment :
+    BaseFragment<FragmentAdminBinding, AdminViewModel>(FragmentAdminBinding::inflate) {
     override val viewModel: AdminViewModel by viewModels()
 
-    override fun initView() = with(binding){
+    override fun initView() = with(binding) {
 
-        btnCopyToken.click {  clipToBuffer(viewModel.token.value.toString())  }
+        btnCopyToken.click { clipToBuffer(viewModel.token.value.toString()) }
 
-        btnCopySecretPin.click {  clipToBuffer(viewModel.secretPin.value.toString())  }
+        btnCopySecretPin.click { clipToBuffer(viewModel.secretPin.value.toString()) }
 
         btnBack.click { navigateTo(Destinations.ADMIN_TO_CALCULATOR.id) }
 
-        btnClearToDefault.click { viewModel.clearAllToDefault()}
+        btnClearToDefault.click {
+            alertDialog(
+                titleAlert = "Внимание",
+                bodyText = "Вы точно хотите сбросить все настройки?",
+                positiveBtnLogic = {
+                    viewModel.clearAllToDefault()
+                }
+            )
+        }
     }
 
     override fun initObservers() = with(viewModel) {

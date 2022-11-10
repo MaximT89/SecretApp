@@ -59,8 +59,6 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
         initCallbacks()
     }
 
-
-
     inline fun <reified T> readArguments(
         key: String,
         ifExist: (data: T) -> Unit = {},
@@ -198,7 +196,9 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
      *
      * @param id передаем id строки из [strings]
      */
-    fun string(@StringRes id: Int) = requireActivity().getString(id)
+    fun string(@StringRes id: Int) {
+        requireActivity().getString(id)
+    }
 
     /**
      * Выносим логику навигации в базовый фрагмент, во фрагментах используем метод [navigateTo]
