@@ -23,35 +23,15 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
     val allUserInput: LiveData<String> = _allUserInput
 
     // calculator
-    companion object {
-        //    private val _numberForUser = MutableLiveData("0")
-//    val numberForUser: LiveData<String> = _numberForUser
-//
-//    private val _firstNumber = MutableLiveData("")
-//    val firstNumber: LiveData<String> = _firstNumber
-//
-//    private val _secondNumber = MutableLiveData("")
-//    val secondNumber: LiveData<String> = _secondNumber
-//
-//    private val _currentOperation = MutableLiveData(Operation.EMPTY)
-//    private val _operationFirst = MutableLiveData(false)
-//
-//    private val _finalDataText = MutableLiveData("")
-//    val finalDataText: LiveData<String> = _finalDataText
-    }
-
     private val _currentNumber = MutableLiveData("0")
     val currentNumber: LiveData<String> = _currentNumber
 
     private val _resultCalculate = MutableLiveData("")
-    val resultCalculate: LiveData<String> = _resultCalculate
 
     private val _operation = MutableLiveData(Operation.EMPTY)
-    val operation: LiveData<Operation> = _operation
 
     private val _finalText = MutableLiveData<String>("")
     val finalText: LiveData<String> = _finalText
-
 
     init {
         checkUserIsAuth()
@@ -85,7 +65,7 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
             when (_operation.value!!) {
                 Operation.EMPTY -> {
 
-                    if(_resultCalculate.value == "0") _resultCalculate.value = _currentNumber.value
+                    if (_resultCalculate.value == "0") _resultCalculate.value = _currentNumber.value
                     else _resultCalculate.value = _resultCalculate.value
 
                     _currentNumber.value = "0"
@@ -98,7 +78,8 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
                     val newResult =
                         _resultCalculate.value?.toDouble()!!.plus(_currentNumber.value!!.toDouble())
 
-                    if (newResult % 1 == 0.0) _resultCalculate.value = newResult.toString().substringBefore(".")
+                    if (newResult % 1 == 0.0) _resultCalculate.value =
+                        newResult.toString().substringBefore(".")
                     else _resultCalculate.value = newResult.toString()
 
                     _currentNumber.value = "0"
@@ -110,9 +91,11 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
                 Operation.MINUS -> {
 
                     val newResult =
-                        _resultCalculate.value?.toDouble()!!.minus(_currentNumber.value!!.toDouble())
+                        _resultCalculate.value?.toDouble()!!
+                            .minus(_currentNumber.value!!.toDouble())
 
-                    if (newResult % 1 == 0.0) _resultCalculate.value = newResult.toString().substringBefore(".")
+                    if (newResult % 1 == 0.0) _resultCalculate.value =
+                        newResult.toString().substringBefore(".")
                     else _resultCalculate.value = newResult.toString()
 
                     _currentNumber.value = "0"
@@ -123,57 +106,42 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
                 }
                 Operation.TIMES -> {
                     val newResult =
-                        _resultCalculate.value?.toDouble()!!.times(_currentNumber.value!!.toDouble())
+                        _resultCalculate.value?.toDouble()!!
+                            .times(_currentNumber.value!!.toDouble())
 
-                    if (newResult % 1 == 0.0) {
-                        _resultCalculate.value = newResult.toString().substringBefore(".")
-                    } else {
-                        _resultCalculate.value = newResult.toString()
-                    }
+                    if (newResult % 1 == 0.0) _resultCalculate.value =
+                        newResult.toString().substringBefore(".")
+                    else _resultCalculate.value = newResult.toString()
 
                     _currentNumber.value = "0"
 
                     _operation.value = operation
                     updateFinalText()
-                    if (_operation.value == Operation.EQUAL) {
-                        logicEqual()
-                    }
+                    if (_operation.value == Operation.EQUAL) logicEqual()
+
                 }
                 Operation.DIV -> {
-
-                    log("выполняется DIV")
-
                     val newResult =
                         _resultCalculate.value?.toDouble()!!.div(_currentNumber.value!!.toDouble())
 
-                    if (newResult % 1 == 0.0) {
-                        _resultCalculate.value = newResult.toString().substringBefore(".")
-                    } else {
-                        _resultCalculate.value = newResult.toString()
-                    }
+                    if (newResult % 1 == 0.0) _resultCalculate.value =
+                        newResult.toString().substringBefore(".")
+                    else _resultCalculate.value = newResult.toString()
 
                     _currentNumber.value = "0"
 
                     _operation.value = operation
                     updateFinalText()
-                    if (_operation.value == Operation.EQUAL) {
-                        logicEqual()
-                    }
-                }
-                Operation.EQUAL -> {
-
+                    if (_operation.value == Operation.EQUAL) logicEqual()
 
                 }
+                Operation.EQUAL -> {}
             }
         }
     }
 
     private fun logicEqual() {
-
-//        updateFinalText()
-
         _currentNumber.value = "0"
-//        _resultCalculate.value = ""
         _operation.value = Operation.EMPTY
         _allUserInput.value = ""
     }
@@ -181,11 +149,10 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
     private fun updateFinalText() {
 
         _finalText.value =
-            _resultCalculate.value.plus(_operation.value?.equalString).plus(if(_currentNumber.value == "0"){
-                ""
-            } else {
-                _currentNumber.value
-            })
+            _resultCalculate.value.plus(_operation.value?.equalString).plus(
+                if (_currentNumber.value == "0") ""
+                else _currentNumber.value
+            )
     }
 
     private fun updateUserInput(value: String) {
