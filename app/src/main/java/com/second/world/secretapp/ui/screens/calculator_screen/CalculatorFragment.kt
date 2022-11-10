@@ -58,12 +58,11 @@ class CalculatorFragment  : BaseFragment<FragmentCalculatorBinding,
     override fun initObservers() {
         viewModel.destination.observe { destination -> navigateTo(destination) }
 
-        viewModel.numberForUser.observe {
+        viewModel.currentNumber.observe {
             updateText(binding.mainText, it)
-            viewModel.updateFinalData()
         }
 
-        viewModel.finalDataText.observe {
+        viewModel.finalText.observe {
             updateText(binding.finalDataText, it)
         }
 

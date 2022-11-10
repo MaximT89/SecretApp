@@ -1,10 +1,10 @@
 package com.second.world.secretapp.ui.screens.calculator_screen
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.second.world.secretapp.core.bases.BaseViewModel
 import com.second.world.secretapp.core.constants.Constants
+import com.second.world.secretapp.core.extension.log
 import com.second.world.secretapp.core.navigation.Destinations
 import com.second.world.secretapp.data.app.local.AppPrefs
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,20 +23,34 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
     val allUserInput: LiveData<String> = _allUserInput
 
     // calculator
-    private val _numberForUser = MutableLiveData("0")
-    val numberForUser: LiveData<String> = _numberForUser
+    companion object {
+        //    private val _numberForUser = MutableLiveData("0")
+//    val numberForUser: LiveData<String> = _numberForUser
+//
+//    private val _firstNumber = MutableLiveData("")
+//    val firstNumber: LiveData<String> = _firstNumber
+//
+//    private val _secondNumber = MutableLiveData("")
+//    val secondNumber: LiveData<String> = _secondNumber
+//
+//    private val _currentOperation = MutableLiveData(Operation.EMPTY)
+//    private val _operationFirst = MutableLiveData(false)
+//
+//    private val _finalDataText = MutableLiveData("")
+//    val finalDataText: LiveData<String> = _finalDataText
+    }
 
-    private val _firstNumber = MutableLiveData("")
-    val firstNumber: LiveData<String> = _firstNumber
+    private val _currentNumber = MutableLiveData("0")
+    val currentNumber: LiveData<String> = _currentNumber
 
-    private val _secondNumber = MutableLiveData("")
-    val secondNumber: LiveData<String> = _secondNumber
+    private val _resultCalculate = MutableLiveData("")
+    val resultCalculate: LiveData<String> = _resultCalculate
 
-    private val _currentOperation = MutableLiveData(Operation.EMPTY)
-    private val _operationFirst = MutableLiveData(false)
+    private val _operation = MutableLiveData(Operation.EMPTY)
+    val operation: LiveData<Operation> = _operation
 
-    private val _finalDataText = MutableLiveData("")
-    val finalDataText: LiveData<String> = _finalDataText
+    private val _finalText = MutableLiveData<String>("")
+    val finalText: LiveData<String> = _finalText
 
 
     init {
@@ -48,14 +62,130 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
     fun addNewValue(value: String) {
         updateUserInput(value)
 
-        _numberForUser.value = if (_numberForUser.value == "0") value
+        _currentNumber.value = if (_currentNumber.value == "0") value
         else {
-            if (_numberForUser.value?.length!! <= 13) {
-                _numberForUser.value.plus(value)
-            } else {
-                _numberForUser.value
+            if (_currentNumber.value?.length!! <= 13) _currentNumber.value.plus(value)
+            else _currentNumber.value
+        }
+        updateFinalText()
+    }
+
+    fun setOperation(operation: Operation) {
+
+        if (_resultCalculate.value == "") {
+
+            _resultCalculate.value = _currentNumber.value
+            _currentNumber.value = "0"
+
+            _operation.value = operation
+
+            updateFinalText()
+        } else {
+
+            when (_operation.value!!) {
+                Operation.EMPTY -> {
+
+                    if(_resultCalculate.value == "0") _resultCalculate.value = _currentNumber.value
+                    else _resultCalculate.value = _resultCalculate.value
+
+                    _currentNumber.value = "0"
+
+                    _operation.value = operation
+                    updateFinalText()
+                }
+                Operation.PLUS -> {
+
+                    val newResult =
+                        _resultCalculate.value?.toDouble()!!.plus(_currentNumber.value!!.toDouble())
+
+                    if (newResult % 1 == 0.0) _resultCalculate.value = newResult.toString().substringBefore(".")
+                    else _resultCalculate.value = newResult.toString()
+
+                    _currentNumber.value = "0"
+
+                    _operation.value = operation
+                    updateFinalText()
+                    if (_operation.value == Operation.EQUAL) logicEqual()
+                }
+                Operation.MINUS -> {
+
+                    val newResult =
+                        _resultCalculate.value?.toDouble()!!.minus(_currentNumber.value!!.toDouble())
+
+                    if (newResult % 1 == 0.0) _resultCalculate.value = newResult.toString().substringBefore(".")
+                    else _resultCalculate.value = newResult.toString()
+
+                    _currentNumber.value = "0"
+
+                    _operation.value = operation
+                    updateFinalText()
+                    if (_operation.value == Operation.EQUAL) logicEqual()
+                }
+                Operation.TIMES -> {
+                    val newResult =
+                        _resultCalculate.value?.toDouble()!!.times(_currentNumber.value!!.toDouble())
+
+                    if (newResult % 1 == 0.0) {
+                        _resultCalculate.value = newResult.toString().substringBefore(".")
+                    } else {
+                        _resultCalculate.value = newResult.toString()
+                    }
+
+                    _currentNumber.value = "0"
+
+                    _operation.value = operation
+                    updateFinalText()
+                    if (_operation.value == Operation.EQUAL) {
+                        logicEqual()
+                    }
+                }
+                Operation.DIV -> {
+
+                    log("выполняется DIV")
+
+                    val newResult =
+                        _resultCalculate.value?.toDouble()!!.div(_currentNumber.value!!.toDouble())
+
+                    if (newResult % 1 == 0.0) {
+                        _resultCalculate.value = newResult.toString().substringBefore(".")
+                    } else {
+                        _resultCalculate.value = newResult.toString()
+                    }
+
+                    _currentNumber.value = "0"
+
+                    _operation.value = operation
+                    updateFinalText()
+                    if (_operation.value == Operation.EQUAL) {
+                        logicEqual()
+                    }
+                }
+                Operation.EQUAL -> {
+
+
+                }
             }
         }
+    }
+
+    private fun logicEqual() {
+
+//        updateFinalText()
+
+        _currentNumber.value = "0"
+//        _resultCalculate.value = ""
+        _operation.value = Operation.EMPTY
+        _allUserInput.value = ""
+    }
+
+    private fun updateFinalText() {
+
+        _finalText.value =
+            _resultCalculate.value.plus(_operation.value?.equalString).plus(if(_currentNumber.value == "0"){
+                ""
+            } else {
+                _currentNumber.value
+            })
     }
 
     private fun updateUserInput(value: String) {
@@ -63,48 +193,38 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
     }
 
     fun convertToPercent() {
-        if (_numberForUser.value != "0") _numberForUser.value =
-            (_numberForUser.value?.toDouble()?.div(100)).toString()
+        if (_currentNumber.value != "0") _currentNumber.value =
+            (_currentNumber.value?.toDouble()?.div(100)).toString()
+
+        updateFinalText()
     }
 
     fun backspace() {
 
         _allUserInput.value = _allUserInput.value?.dropLast(1)
 
-        if (_numberForUser.value != "0") {
-            val s = _numberForUser.value?.dropLast(1)
-            if (s == "") _numberForUser.value = "0"
-            else _numberForUser.value = s
+        if (_currentNumber.value != "0") {
+            val s = _currentNumber.value?.dropLast(1)
+            if (s == "") _currentNumber.value = "0"
+            else _currentNumber.value = s
         }
+        updateFinalText()
     }
 
     fun clearCurrentNumber() {
-        _numberForUser.value = "0"
+        _currentNumber.value = "0"
+        _resultCalculate.value = ""
+        _operation.value = Operation.EMPTY
         _allUserInput.value = ""
-        updateFinalData()
-    }
-
-    fun setOperation(operation: Operation) {
-        if (_operationFirst.value == false) {
-            _currentOperation.value = operation
-            _firstNumber.value = _numberForUser.value
-            _numberForUser.value = "0"
-            updateFinalData()
-        } else {
-            _secondNumber.value = _numberForUser.value
-        }
-
+        updateFinalText()
     }
 
     fun addComma() {
-        val s = _numberForUser.value
-        if (!s!!.contains(".")) _numberForUser.value = _numberForUser.value.plus(".")
-    }
-
-    fun updateFinalData() {
-        _finalDataText.value = _firstNumber.value
-            ?.plus(_currentOperation.value?.equalString)
-            ?.plus(_secondNumber.value)
+        val s = _currentNumber.value
+        if (!s!!.contains(".")) {
+            _currentNumber.value = _currentNumber.value.plus(".")
+            updateFinalText()
+        }
     }
 
     // core methods
@@ -141,5 +261,5 @@ enum class Operation(val equalString: String) {
     MINUS("-"),
     TIMES("*"),
     DIV("/"),
-    EQUAL("=")
+    EQUAL("")
 }
