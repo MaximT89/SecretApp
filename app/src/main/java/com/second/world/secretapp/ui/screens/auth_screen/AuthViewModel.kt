@@ -7,12 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.second.world.secretapp.core.bases.BaseResult
 import com.second.world.secretapp.core.bases.BaseViewModel
 import com.second.world.secretapp.core.bases.Dispatchers
-import com.second.world.secretapp.data.app.local.AppPrefs
-import com.second.world.secretapp.data.auth.remote.model.requests.RequestGetSms
-import com.second.world.secretapp.data.auth.remote.model.requests.RequestGetUserData
-import com.second.world.secretapp.data.auth.remote.model.responses.ResponseGetSms
-import com.second.world.secretapp.data.auth.remote.model.responses.ResponseGetUserData
-import com.second.world.secretapp.data.auth.repository.AuthRepository
+import com.second.world.secretapp.data.auth_screen.remote.model.requests.RequestGetSms
+import com.second.world.secretapp.data.auth_screen.remote.model.requests.RequestGetUserData
+import com.second.world.secretapp.data.auth_screen.remote.model.responses.ResponseGetSms
+import com.second.world.secretapp.data.auth_screen.remote.model.responses.ResponseGetUserData
+import com.second.world.secretapp.data.auth_screen.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

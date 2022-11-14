@@ -1,4 +1,4 @@
-package com.second.world.secretapp.data.auth.remote.model.requests
+package com.second.world.secretapp.data.auth_screen.remote.model.requests
 
 import com.google.gson.annotations.SerializedName
 
