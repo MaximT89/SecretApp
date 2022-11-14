@@ -7,25 +7,25 @@ import androidx.lifecycle.viewModelScope
 import com.second.world.secretapp.core.bases.BaseResult
 import com.second.world.secretapp.core.bases.BaseViewModel
 import com.second.world.secretapp.core.bases.Dispatchers
-import com.second.world.secretapp.core.extension.log
 import com.second.world.secretapp.data.app.local.AppPrefs
-import com.second.world.secretapp.data.auth.remote.model.ResponseAuth
+import com.second.world.secretapp.data.auth.remote.model.requests.RequestGetSms
+import com.second.world.secretapp.data.auth.remote.model.requests.RequestGetUserData
+import com.second.world.secretapp.data.auth.remote.model.responses.ResponseGetSms
+import com.second.world.secretapp.data.auth.remote.model.responses.ResponseGetUserData
 import com.second.world.secretapp.data.auth.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val repository: AuthRepository,
     private val dispatchers: Dispatchers,
-    private val appPrefs: AppPrefs
 ) : BaseViewModel() {
 
     private var _authState = MutableLiveData<AuthState>()
     val authState: LiveData<AuthState> = _authState
 
+    private var _userPhone = MutableLiveData<String>()
     private var _smsCode = MutableLiveData<Int>()
 
     init {
@@ -33,58 +33,91 @@ class AuthViewModel @Inject constructor(
     }
 
     private fun checkUserAuth() {
-        if(appPrefs.loadUserIsAuth()){
-            if (appPrefs.loadTokenApi() == "555") {
-                _authState.value = AuthState.ChangeSecretPin
-            } else {
-                _authState.value = AuthState.SuccessAuth
-            }
+        if (repository.loadUserIsAuth()) {
+            if (repository.getToken() == "555") _authState.value = AuthState.ChangeSecretPin
+            else _authState.value = AuthState.SuccessAuth
         }
     }
 
-    // ТЕСТОВАЯ ЗАГЛУШКА
-    // TODO: убрать после получения реального АПИ
-    fun getSms(phone: String) {
-        if (phoneIsCorrect(phone)) {
-            _authState.value = AuthState.Loading
-            viewModelScope.launch {
-                delay(3000)
-                _smsCode.value = 1111
-                _authState.value = AuthState.SuccessGetSms(ResponseAuth(111))
-            }
-        } else _authState.value = AuthState.Error("Некорректный номер телефона")
-
+    fun saveUserPhone(phone: String) {
+        _userPhone.value = phone
     }
 
     /**
      * Метод запроса смс-кода с сервера
      */
-//    fun getSms(phone: String) {
-//
-//        if (phoneIsCorrect(phone)) {
-//            _authState.value = AuthState.Loading
-//            dispatchers.launchBackground(viewModelScope) {
-//                when (val result = repository.getSms(phone)) {
-//                    is BaseResult.Error -> {
-//                        if (result.err.code == 1) getSms(phone)
-//                        else if (result.err.code != 0)
-//                            _authState.postValue(AuthState.Error(result.err.message))
-//                        else
-//                            _authState.postValue(AuthState.NoInternet(result.err.message))
-//                    }
-//                    is BaseResult.Success -> {
-//                        _smsCode.postValue(result.data.smsCode)
-//                        _authState.postValue(
-//                            AuthState.SuccessGetSms(
-//                                result.data
-//                            )
-//                        )
-//                    }
-//                }
-//            }
-//        } else _authState.value = AuthState.Error("Некорректный номер телефона")
-//
-//    }
+    fun getSms(phone: String) {
+
+        if (phoneIsCorrect(phone)) {
+
+            _authState.value = AuthState.Loading
+
+            dispatchers.launchBackground(viewModelScope) {
+                when (val result =
+                    repository.getSms(RequestGetSms(phone, repository.loadLang()))) {
+                    is BaseResult.Error -> {
+                        if (result.err.code == 1) getSms(phone)
+                        else if (result.err.code != 0)
+                            _authState.postValue(AuthState.Error(result.err.message))
+                        else
+                            _authState.postValue(AuthState.NoInternet(result.err.message))
+                    }
+                    is BaseResult.Success -> successResponseGetSms(result.data)
+                }
+            }
+        } else _authState.value = AuthState.Error("Некорректный номер телефона")
+    }
+
+    /**
+     * Метод для отправки смс кода на сервер и получение ответа
+     */
+    fun getUserData(code: String) {
+
+        _authState.value = AuthState.Loading
+        dispatchers.launchBackground(viewModelScope) {
+
+            when (val result = repository.getUserData(
+                RequestGetUserData(
+                    phone = _userPhone.value!!,
+                    code = code,
+                    lang = repository.loadLang()
+                )
+            )) {
+                is BaseResult.Error -> {
+                    if (result.err.code == 1) getUserData(code)
+                    else if (result.err.code != 0)
+                        _authState.postValue(AuthState.Error(result.err.message))
+                    else
+                        _authState.postValue(AuthState.NoInternet(result.err.message))
+                }
+                is BaseResult.Success -> successResponseGetUserData(result.data)
+            }
+        }
+    }
+
+    /**
+     * Обработка успешного ответа при отправки смс кода
+     */
+    private fun successResponseGetUserData(data: ResponseGetUserData) {
+        if (data.result!!) {
+
+            repository.saveUserIsAuth(true)
+            repository.saveToken(data.data?.token!!)
+
+            _authState.postValue(AuthState.SuccessAuth)
+
+        } else _authState.postValue(AuthState.Error("Произошла ошибка"))
+    }
+
+
+    /**
+     * Если пришел успешный ответ, то нам еще нужно проверить пришел ли result
+     * false или нет, если да, то просто выводить ошибку
+     */
+    private fun successResponseGetSms(data: ResponseGetSms) {
+        if (data.result!!) _authState.postValue(AuthState.SuccessGetSms(data))
+        else _authState.postValue(AuthState.Error("Произошла ошибка"))
+    }
 
     /**
      * Валидация телефонного номера, так как в поле можно вводить только цифры, нам остается проверить
@@ -108,15 +141,15 @@ class AuthViewModel @Inject constructor(
         } else _authState.value = AuthState.Error("Неверный код")
     }
 
-    private fun userIsAuth(newStatus : Boolean) {
-        appPrefs.saveUserIsAuth(newStatus)
+    private fun userIsAuth(newStatus: Boolean) {
+        repository.saveUserIsAuth(newStatus)
     }
 
     /**
      * Проверяем секретный пароль, если он равен 555, значит нужно этот пароль изменить
      */
     private fun checkUserSecretPin(): Boolean {
-        val secretPin = appPrefs.loadUserSecretPin()
+        val secretPin = repository.loadUserSecretPin()
         if (secretPin == 555) return false
         return true
     }
@@ -125,16 +158,17 @@ class AuthViewModel @Inject constructor(
      * Валидация нового пин-кода
      */
     fun updateNewPin(firstPin: String, secondPin: String) {
-        if (TextUtils.isEmpty(firstPin) || TextUtils.isEmpty(secondPin)){
+        if (TextUtils.isEmpty(firstPin) || TextUtils.isEmpty(secondPin)) {
             _authState.value = AuthState.Error("Введите новый pin-код")
         } else if (firstPin != secondPin) {
             _authState.value = AuthState.Error("Pin-коды не совпадают")
         } else if (firstPin.length < 3 || firstPin.length > 8) {
-            _authState.value = AuthState.Error("Pin-код не соответствует длине (от 3 до 8 символов)")
+            _authState.value =
+                AuthState.Error("Pin-код не соответствует длине (от 3 до 8 символов)")
         } else if (firstPin.toCharArray().toSet().size == 1) {
             _authState.value = AuthState.Error("Pin-код не может состоять из одной цифры")
         } else {
-            appPrefs.saveUserSecretPin(firstPin.toInt())
+            repository.saveUserSecretPin(firstPin.toInt())
             _authState.value = AuthState.SuccessAuth
         }
     }
@@ -146,7 +180,7 @@ class AuthViewModel @Inject constructor(
 sealed class AuthState {
 
     // Успешное получение смс без ошибки
-    class SuccessGetSms(val data: ResponseAuth) : AuthState()
+    class SuccessGetSms(val data: ResponseGetSms) : AuthState()
 
     // Полное успешная авторизация (секретный код уже был изменен ранее)
     object SuccessAuth : AuthState()

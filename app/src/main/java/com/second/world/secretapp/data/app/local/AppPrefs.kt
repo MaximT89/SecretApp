@@ -16,6 +16,9 @@ class AppPrefs @Inject constructor(private val basePref: BaseSharedPreferences) 
 
         const val TOKEN_API = "token_api"
         const val DEFAULT_TOKEN_API = ""
+
+        const val APP_LANG = "app_lang"
+        const val DEFAULT_APP_LANG = "ru"
     }
 
     fun loadUserIsAuth() =
@@ -46,6 +49,16 @@ class AppPrefs @Inject constructor(private val basePref: BaseSharedPreferences) 
 
     fun saveTokenApi(value: String) {
         basePref.defaultPref().editMe { it.put(TOKEN_API to value) }
+    }
+
+    fun loadAppLang() =
+        basePref.defaultPref().getString(
+            APP_LANG,
+            DEFAULT_APP_LANG
+        )
+
+    fun saveAppLang(value: String) {
+        basePref.defaultPref().editMe { it.put(APP_LANG to value) }
     }
 
 }

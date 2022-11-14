@@ -1,6 +1,6 @@
 package com.second.world.secretapp.data.auth.remote.di
 
-import com.second.world.secretapp.data.auth.remote.AuthService
+import com.second.world.secretapp.data.auth.remote.api.AuthService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

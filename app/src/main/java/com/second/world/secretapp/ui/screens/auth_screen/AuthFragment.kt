@@ -24,12 +24,18 @@ class AuthFragment :
         createPhoneMask()
 
         // телефон будет получен в формате 9536506580
+        // Запрос смс кода
         binding.btnGetSms.click {
+            viewModel.saveUserPhone(binding.phoneEditText.text.toString().onlyDigits())
             viewModel.getSms(binding.phoneEditText.text.toString().onlyDigits())
         }
 
-        binding.btnCheckSms.click { viewModel.checkSmsCode(binding.smsEditText.text.toString()) }
+        // Сверка смс кода (отправка кода на сервер и получение результата)
+        binding.btnCheckSms.click {
+            viewModel.getUserData(binding.smsEditText.text.toString())
+        }
 
+        // Обновить секретный код
         binding.btnUpdateNewPin.click {
             viewModel.updateNewPin(
                 binding.firstNewPin.text.toString().onlyDigits(),
