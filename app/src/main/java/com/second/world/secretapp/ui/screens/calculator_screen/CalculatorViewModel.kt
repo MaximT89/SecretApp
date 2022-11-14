@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.second.world.secretapp.core.bases.BaseViewModel
 import com.second.world.secretapp.core.constants.Constants
-import com.second.world.secretapp.core.extension.log
 import com.second.world.secretapp.core.navigation.Destinations
 import com.second.world.secretapp.data.app.local.AppPrefs
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -61,6 +60,8 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
 
             updateFinalText()
         } else {
+
+            // TODO: надо проверять есть ли currentNumber если его нет то не производить операцию, а менять текущую операцию
 
             when (_operation.value!!) {
                 Operation.EMPTY -> {

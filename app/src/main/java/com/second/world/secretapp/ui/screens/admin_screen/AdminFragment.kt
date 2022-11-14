@@ -13,6 +13,8 @@ class AdminFragment :
     BaseFragment<FragmentAdminBinding, AdminViewModel>(FragmentAdminBinding::inflate) {
     override val viewModel: AdminViewModel by viewModels()
 
+    // TODO: оставить вход только если есть права на нее
+
     override fun initView() = with(binding) {
 
         btnCopyToken.click { clipToBuffer(viewModel.token.value.toString()) }
