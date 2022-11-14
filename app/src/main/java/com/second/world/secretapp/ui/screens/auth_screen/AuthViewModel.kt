@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.second.world.secretapp.core.bases.BaseResult
 import com.second.world.secretapp.core.bases.BaseViewModel
 import com.second.world.secretapp.core.bases.Dispatchers
+import com.second.world.secretapp.core.remote.Failure
 import com.second.world.secretapp.data.auth_screen.remote.model.requests.RequestGetSms
 import com.second.world.secretapp.data.auth_screen.remote.model.requests.RequestGetUserData
 import com.second.world.secretapp.data.auth_screen.remote.model.responses.ResponseGetSms
@@ -52,15 +53,8 @@ class AuthViewModel @Inject constructor(
             _authState.value = AuthState.Loading
 
             dispatchers.launchBackground(viewModelScope) {
-                when (val result =
-                    repository.getSms(RequestGetSms(phone, repository.loadLang()))) {
-                    is BaseResult.Error -> {
-                        if (result.err.code == 1) getSms(phone)
-                        else if (result.err.code != 0)
-                            _authState.postValue(AuthState.Error(result.err.message))
-                        else
-                            _authState.postValue(AuthState.NoInternet(result.err.message))
-                    }
+                when (val result = repository.getSms(RequestGetSms(phone, repository.loadLang()))) {
+                    is BaseResult.Error -> errorResult(result) { getSms(phone) }
                     is BaseResult.Success -> successResponseGetSms(result.data)
                 }
             }
@@ -82,16 +76,21 @@ class AuthViewModel @Inject constructor(
                     lang = repository.loadLang()
                 )
             )) {
-                is BaseResult.Error -> {
-                    if (result.err.code == 1) getUserData(code)
-                    else if (result.err.code != 0)
-                        _authState.postValue(AuthState.Error(result.err.message))
-                    else
-                        _authState.postValue(AuthState.NoInternet(result.err.message))
-                }
+                is BaseResult.Error -> errorResult(result) { getUserData(code) }
                 is BaseResult.Success -> successResponseGetUserData(result.data)
             }
         }
+    }
+
+    private fun errorResult(
+        result: BaseResult.Error<Failure>,
+        protocolError: () -> Unit
+    ) {
+        if (result.err.code == 1) protocolError.invoke()
+        else if (result.err.code != 0)
+            _authState.postValue(AuthState.Error(result.err.message))
+        else
+            _authState.postValue(AuthState.NoInternet(result.err.message))
     }
 
     /**
