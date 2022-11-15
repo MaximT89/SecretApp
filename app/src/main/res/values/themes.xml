@@ -20,4 +20,11 @@
     <style name="AlertDialog.Custom" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
+
+    <style name="TextView.Standart" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/Black</item>
+    </style>
+
+
 </resources>

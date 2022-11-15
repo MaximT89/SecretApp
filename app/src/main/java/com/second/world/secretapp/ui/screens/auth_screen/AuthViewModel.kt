@@ -130,14 +130,13 @@ class AuthViewModel @Inject constructor(
     private fun successResponseGetUserData(data: ResponseGetUserData) {
         if (data.result!!) {
 
-            repository.saveUserIsAuth(true)
+            userIsAuth(true)
             repository.saveToken(data.data?.token!!)
 
-            _authState.postValue(AuthState.SuccessAuth)
+            validateSecretCode()
 
         } else _authState.postValue(AuthState.Error("Произошла ошибка"))
     }
-
 
     /**
      * Если пришел успешный ответ, то нам еще нужно проверить пришел ли result
@@ -160,17 +159,11 @@ class AuthViewModel @Inject constructor(
     }
 
     /**
-     * Проверяем смс-код который вводит пользователь, он должен сходиться с тем что пришел с сервера
+     * Валидация секретного кода пользователя
      */
-    fun checkSmsCode(userCode: String) {
-        if (userCode == _smsCode.value.toString()) {
-
-            userIsAuth(true)
-
-            if (checkUserSecretPin()) _authState.value = AuthState.SuccessAuth
-            else _authState.value = AuthState.ChangeSecretPin
-
-        } else _authState.value = AuthState.Error("Неверный код")
+    fun validateSecretCode() {
+        if (checkUserSecretPin()) _authState.postValue(AuthState.SuccessAuth)
+        else _authState.postValue(AuthState.ChangeSecretPin)
     }
 
     private fun userIsAuth(newStatus: Boolean) {

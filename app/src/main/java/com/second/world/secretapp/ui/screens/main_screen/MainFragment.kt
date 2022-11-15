@@ -1,6 +1,7 @@
 package com.second.world.secretapp.ui.screens.main_screen
 
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.second.world.secretapp.R
 import com.second.world.secretapp.core.bases.BaseFragment
@@ -20,29 +21,17 @@ class MainFragment :
 
     override fun initView() = with(binding) {
 
-        btnScreenSettings.click { showSetting(true) }
+        btnScreenSettings.click {
+            if (leftMenu.isVisible) leftMenu.hide()
+            else leftMenu.show()
+        }
 
-        mainScreenRoot.click { showSetting(false) }
+        mainScreenRoot.click {
 
-        btnCloseSettings.click { showSetting(false) }
+        }
 
         btnLogout.click {
             viewModel.logout()
-        }
-    }
-
-    private fun showSetting(status: Boolean) {
-        if (status) {
-            binding.settingRoot.show()
-            binding.mainScreenRoot.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireActivity(),
-                    R.color.gray
-                )
-            )
-        } else {
-            binding.settingRoot.hide()
-            binding.mainScreenRoot.setBackgroundColor(0)
         }
     }
 
@@ -81,7 +70,6 @@ class MainFragment :
     }
 
     private fun showError(messageError: String) {
-        binding.testErrorText.text = messageError
         showSnackbar(messageError)
     }
 

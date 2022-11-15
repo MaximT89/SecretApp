@@ -156,7 +156,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:src="@drawable/ic_baseline_close_24"
+                android:src="@drawable/ic_baseline_close_orange_24"
                 android:padding="23dp"
                 android:textStyle="bold"
                 android:contentDescription="@string/times" />
