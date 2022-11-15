@@ -5,6 +5,7 @@ import com.second.world.secretapp.core.bases.BaseFragment
 import com.second.world.secretapp.core.extension.click
 import com.second.world.secretapp.core.extension.updateText
 import com.second.world.secretapp.databinding.FragmentCalculatorBinding
+import com.second.world.secretapp.ui.screens.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

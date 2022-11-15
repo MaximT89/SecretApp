@@ -24,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.second.world.secretapp.R
 import com.second.world.secretapp.core.extension.click
 import com.second.world.secretapp.databinding.CustomAlertDialogBinding
+import com.second.world.secretapp.ui.screens.MainActivity
 import java.lang.IllegalArgumentException
 import kotlin.reflect.full.isSubclassOf
 
@@ -57,6 +58,14 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
         listenerBundleArguments()
         initObservers()
         initCallbacks()
+    }
+
+    fun updateTitle(title : String = "Без названия"){
+        (activity as MainActivity).updateTitle(title)
+    }
+
+    fun showTitle(status : Boolean = false) {
+        (activity as MainActivity).showTitleField(status)
     }
 
     inline fun <reified T> readArguments(

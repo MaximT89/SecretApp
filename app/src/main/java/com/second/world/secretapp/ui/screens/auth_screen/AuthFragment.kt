@@ -5,6 +5,7 @@ import com.second.world.secretapp.core.bases.BaseFragment
 import com.second.world.secretapp.core.extension.*
 import com.second.world.secretapp.core.navigation.Destinations
 import com.second.world.secretapp.databinding.FragmentAuthBinding
+import com.second.world.secretapp.ui.screens.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import ru.tinkoff.decoro.MaskImpl
 import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser

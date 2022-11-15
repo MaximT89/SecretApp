@@ -20,14 +20,10 @@ class MainViewModel @Inject constructor(
     private val repository: MainScreenRepository
 ) : BaseViewModel() {
 
-    private val _userIsAuth = MutableLiveData<Boolean>()
-    val userIsAuth: LiveData<Boolean> = _userIsAuth
-
     private val _mainScreenState = MutableLiveData<MainScreenState>()
     val mainScreenState: LiveData<MainScreenState> = _mainScreenState
 
     init {
-        getIsAuth()
         getMainScreenUi()
     }
 
@@ -53,19 +49,6 @@ class MainViewModel @Inject constructor(
             _mainScreenState.postValue(MainScreenState.Error(result.err.message))
         else
             _mainScreenState.postValue(MainScreenState.NoInternet(result.err.message))
-    }
-
-    private fun getIsAuth() {
-        _userIsAuth.value = appPrefs.loadUserIsAuth()
-    }
-
-    private fun saveIsAuth(status: Boolean) {
-        appPrefs.saveUserIsAuth(status)
-    }
-
-    fun logout() {
-        saveIsAuth(false)
-        getIsAuth()
     }
 }
 

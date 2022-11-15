@@ -7,39 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.screens.main_screen.MainFragment">
 
-    <LinearLayout
-        android:id="@+id/leftMenu"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginEnd="50dp"
-        android:orientation="vertical"
-        android:padding="8dp"
-        android:visibility="gone"
-        tools:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleText">
 
-        <TextView
-            style="@style/TextView.Standart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Настройки" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="8dp"
-            android:background="@color/gray" />
-
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:backgroundTint="@color/indian_red"
-            android:text="@string/logout" />
-
-    </LinearLayout>
 
 
     <ProgressBar
@@ -52,29 +20,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="gone" />
-
-    <TextView
-        android:id="@+id/titleText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:padding="10dp"
-        android:textColor="@color/black"
-        android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/main_screen_title" />
-
-    <ImageView
-        android:id="@+id/btnScreenSettings"
-        android:layout_width="30sp"
-        android:layout_height="30sp"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="13dp"
-        android:src="@drawable/ic_baseline_menu_24"
-        app:layout_constraintStart_toStartOf="@+id/titleText"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

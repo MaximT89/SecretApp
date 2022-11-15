@@ -217,8 +217,10 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
         if (value == _secretPinFromPref.value.toString()) {
             _allUserInput.value = ""
             _destination.value =
-                if (_isAuth.value == true) Destinations.CALCULATOR_TO_MAIN.id
-                else Destinations.CALCULATOR_TO_AUTH.id
+                if (_isAuth.value == true) {
+                    if (appPrefs.loadUserSecretPin() == 555) Destinations.CALCULATOR_TO_AUTH.id
+                    else Destinations.CALCULATOR_TO_MAIN.id
+                } else Destinations.CALCULATOR_TO_AUTH.id
         }
     }
 }

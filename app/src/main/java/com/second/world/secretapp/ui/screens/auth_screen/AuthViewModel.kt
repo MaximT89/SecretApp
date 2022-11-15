@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.second.world.secretapp.core.bases.BaseResult
 import com.second.world.secretapp.core.bases.BaseViewModel
 import com.second.world.secretapp.core.bases.Dispatchers
+import com.second.world.secretapp.core.extension.log
 import com.second.world.secretapp.core.remote.Failure
 import com.second.world.secretapp.data.auth_screen.remote.model.requests.RequestGetSms
 import com.second.world.secretapp.data.auth_screen.remote.model.requests.RequestGetUserData
@@ -27,7 +28,6 @@ class AuthViewModel @Inject constructor(
     val authState: LiveData<AuthState> = _authState
 
     private val _userPhone = MutableLiveData<String>()
-    private val _smsCode = MutableLiveData<Int>()
 
     private val _timerSecond = MutableLiveData("")
     val timerSecond: LiveData<String> = _timerSecond
@@ -59,7 +59,7 @@ class AuthViewModel @Inject constructor(
      */
     private fun checkUserAuth() {
         if (repository.loadUserIsAuth()) {
-            if (repository.getToken() == "555") _authState.value = AuthState.ChangeSecretPin
+            if (repository.loadUserSecretPin() == 555) _authState.value = AuthState.ChangeSecretPin
             else _authState.value = AuthState.SuccessAuth
         }
     }
