@@ -1,5 +1,6 @@
 package com.second.world.secretapp.ui.screens.auth_screen
 
+import android.os.CountDownTimer
 import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,16 +23,40 @@ class AuthViewModel @Inject constructor(
     private val dispatchers: Dispatchers,
 ) : BaseViewModel() {
 
-    private var _authState = MutableLiveData<AuthState>()
+    private val _authState = MutableLiveData<AuthState>()
     val authState: LiveData<AuthState> = _authState
 
-    private var _userPhone = MutableLiveData<String>()
-    private var _smsCode = MutableLiveData<Int>()
+    private val _userPhone = MutableLiveData<String>()
+    private val _smsCode = MutableLiveData<Int>()
+
+    private val _timerSecond = MutableLiveData("")
+    val timerSecond: LiveData<String> = _timerSecond
 
     init {
         checkUserAuth()
     }
 
+    /**
+     * Создание таймера для возможности повторно получить смс (таймер выносим в main поток)
+     */
+    fun timerStart() {
+        dispatchers.launchUI(viewModelScope){
+            _authState.value = AuthState.Timer(true)
+            object : CountDownTimer(10000, 1000) {
+                override fun onTick(p: Long) {
+                    _timerSecond.value = (p / 1000).toString()
+                }
+
+                override fun onFinish() {
+                    _authState.value = AuthState.Timer(false)
+                }
+            }.start()
+        }
+    }
+
+    /**
+     * Проверяем авторизацию юзера и введенный секретный код, для дальнейшей навигации
+     */
     private fun checkUserAuth() {
         if (repository.loadUserIsAuth()) {
             if (repository.getToken() == "555") _authState.value = AuthState.ChangeSecretPin
@@ -39,6 +64,9 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Сохраняем временно телефон
+     */
     fun saveUserPhone(phone: String) {
         _userPhone.value = phone
     }
@@ -82,6 +110,9 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Выносим код обработки ошибки при запросе на сервер
+     */
     private fun errorResult(
         result: BaseResult.Error<Failure>,
         protocolError: () -> Unit
@@ -113,7 +144,10 @@ class AuthViewModel @Inject constructor(
      * false или нет, если да, то просто выводить ошибку
      */
     private fun successResponseGetSms(data: ResponseGetSms) {
-        if (data.result!!) _authState.postValue(AuthState.SuccessGetSms(data))
+        if (data.result!!) {
+            _authState.postValue(AuthState.SuccessGetSms(data))
+            timerStart()
+        }
         else _authState.postValue(AuthState.Error("Произошла ошибка"))
     }
 
@@ -152,6 +186,10 @@ class AuthViewModel @Inject constructor(
         return true
     }
 
+    fun changeAuthStateToStart() {
+        _authState.value = AuthState.StartState
+    }
+
     /**
      * Валидация нового пин-кода
      */
@@ -176,6 +214,12 @@ class AuthViewModel @Inject constructor(
  * Возможные состояния экрана авторизации
  */
 sealed class AuthState {
+
+    // Стартовое состояние экрана с вводом номера телефона
+    object StartState : AuthState()
+
+    // Состояние для обображения таймера
+    class Timer(val showTimer: Boolean = false) : AuthState()
 
     // Успешное получение смс без ошибки
     class SuccessGetSms(val data: ResponseGetSms) : AuthState()

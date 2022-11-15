@@ -7,6 +7,19 @@
     android:padding="8dp"
     tools:context=".ui.screens.auth_screen.AuthFragment">
 
+    <TextView
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:text="@string/back"
+        android:textColor="@color/Black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:drawableStartCompat="@drawable/arrow_back" />
+
     <LinearLayout
         android:id="@+id/fieldsRoot"
         android:layout_marginTop="176dp"
@@ -53,7 +66,7 @@
             android:id="@+id/smsRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:visibility="gone"
+            tools:visibility="visible"
             android:visibility="gone"
             android:orientation="vertical">
 
@@ -85,7 +98,7 @@
             android:id="@+id/changeSecretPinRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:visibility="visible"
+            tools:visibility="gone"
             android:visibility="gone"
             android:orientation="vertical">
 
@@ -144,16 +157,15 @@
             android:layout_height="wrap_content"/>
 
         <TextView
-            android:id="@+id/textNewSms"
+            android:id="@+id/timerText"
             android:visibility="gone"
-            tools:visibility="gone"
+            tools:visibility="visible"
+            android:textColor="@color/Black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:layout_marginTop="8dp"
             tools:text="Повторно можно получить смс : 60 "/>
-
-
 
     </LinearLayout>
 

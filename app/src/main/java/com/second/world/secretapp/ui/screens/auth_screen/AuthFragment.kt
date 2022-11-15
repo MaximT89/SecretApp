@@ -2,10 +2,7 @@ package com.second.world.secretapp.ui.screens.auth_screen
 
 import androidx.fragment.app.viewModels
 import com.second.world.secretapp.core.bases.BaseFragment
-import com.second.world.secretapp.core.extension.click
-import com.second.world.secretapp.core.extension.hide
-import com.second.world.secretapp.core.extension.onlyDigits
-import com.second.world.secretapp.core.extension.show
+import com.second.world.secretapp.core.extension.*
 import com.second.world.secretapp.core.navigation.Destinations
 import com.second.world.secretapp.databinding.FragmentAuthBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,6 +39,11 @@ class AuthFragment :
                 binding.secondNewPin.text.toString().onlyDigits()
             )
         }
+
+        // Вернуться с набора смс до ввода телефона
+        binding.btnBack.click {
+            viewModel.changeAuthStateToStart()
+        }
     }
 
     override fun initObservers() = with(binding) {
@@ -64,14 +66,33 @@ class AuthFragment :
                     navigateTo(Destinations.AUTH_TO_MAIN.id)
                 }
                 is AuthState.SuccessGetSms -> {
-                    showRoot(smsRoot = true, phoneRoot = false)
+                    showRoot(smsRoot = true, phoneRoot = false, arrowBack = true)
                     showError()
                 }
                 AuthState.ChangeSecretPin -> {
                     showRoot(changeSecretPinRoot = true, phoneRoot = false)
                     showError()
                 }
+                AuthState.StartState -> {
+                    showRoot()
+                    showError()
+                }
+                is AuthState.Timer -> showTimer(state.showTimer)
             }
+        }
+
+        viewModel.timerSecond.observe{ second ->
+            timerText.text = second
+        }
+    }
+
+    private fun showTimer(showTimer: Boolean) {
+        if (showTimer) {
+            binding.timerText.show()
+            binding.btnGetSms.notEnabled()
+        } else {
+            binding.timerText.hide()
+            binding.btnGetSms.enabled()
         }
     }
 
@@ -79,7 +100,8 @@ class AuthFragment :
         smsRoot: Boolean = false,
         phoneRoot: Boolean = true,
         progress: Boolean = false,
-        changeSecretPinRoot: Boolean = false
+        changeSecretPinRoot: Boolean = false,
+        arrowBack: Boolean = false
     ) {
         if (smsRoot) binding.smsRoot.show()
         else binding.smsRoot.hide()
@@ -92,6 +114,9 @@ class AuthFragment :
 
         if (progress) binding.progressBar.show()
         else binding.progressBar.hide()
+
+        if (arrowBack) binding.btnBack.show()
+        else binding.btnBack.hide()
     }
 
     private fun showError(visible: Boolean = false, message: String = "") {

@@ -38,4 +38,5 @@
     <string name="main_screen_title">Управление API</string>
     <string name="settings">Настройки</string>
     <string name="logout">разлогиниться</string>
+    <string name="back">Назад</string>
 </resources>

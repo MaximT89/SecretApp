@@ -75,10 +75,13 @@ class MainFragment :
     private fun showUi(data: ResponseMainScreen) = with(binding) {
         updateText(titleText, data.data?.settings?.titleName!!)
 
+
+
         
     }
 
     private fun showError(messageError: String) {
+        binding.testErrorText.text = messageError
         showSnackbar(messageError)
     }
 
