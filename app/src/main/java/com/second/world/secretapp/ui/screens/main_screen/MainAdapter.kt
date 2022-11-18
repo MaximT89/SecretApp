@@ -6,13 +6,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.second.world.secretapp.core.extension.click
+import com.second.world.secretapp.core.extension.log
 import com.second.world.secretapp.data.main_screen.common.Indicators
 import com.second.world.secretapp.databinding.MainHolderBinding
 import com.second.world.secretapp.ui.screens.main_screen.model_ui.SrvItemUi
 
 class MainAdapter : ListAdapter<SrvItemUi, MainAdapter.MainViewHolder>(ItemComparator()) {
 
-    var callBackBtnStopServer: ((baseUrl: String, url: String) -> Unit)? = null
+    var callBackBtnStopServer: ((baseUrl: String, action: String) -> Unit)? = null
 
     class ItemComparator : DiffUtil.ItemCallback<SrvItemUi>() {
         override fun areItemsTheSame(oldItem: SrvItemUi, newItem: SrvItemUi) =
@@ -29,6 +30,8 @@ class MainAdapter : ListAdapter<SrvItemUi, MainAdapter.MainViewHolder>(ItemCompa
 
             btnStopServer.click {
                 callBackBtnStopServer?.invoke(convertUrl(item), item.action!!)
+
+                log("base: ${convertUrl(item)} // action: ${item.action!!}") // проверка что будет отдавать при клике на redBtn
             }
 
             item.workStatus?.let {

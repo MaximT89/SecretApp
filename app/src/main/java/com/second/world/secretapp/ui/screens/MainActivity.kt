@@ -35,6 +35,9 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initView() = with(binding) {
+
+        binding.btnScreenSettings.setBackgroundResource(R.drawable.ic_baseline_menu_24)
+
         btnLogout.click {
             viewModel.logout()
             findNavController(R.id.nav_host_fragment).navigate(R.id.authFragment)
@@ -47,8 +50,15 @@ class MainActivity : BaseActivity() {
     }
 
     private fun openLeftMenu() {
-        if (binding.leftMenu.isVisible)binding.leftMenu.hide()
-        else binding.leftMenu.show()
+        if (binding.leftMenu.isVisible) {
+            binding.leftMenu.hide()
+            binding.navHostFragment.show()
+            binding.btnScreenSettings.setBackgroundResource(R.drawable.ic_baseline_menu_24)
+        } else {
+            binding.leftMenu.show()
+            binding.navHostFragment.hide()
+            binding.btnScreenSettings.setBackgroundResource(R.drawable.ic_baseline_close_black_24)
+        }
     }
 
     private fun initObservers()= with(viewModel){

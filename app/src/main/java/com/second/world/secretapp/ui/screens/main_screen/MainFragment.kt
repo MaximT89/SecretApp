@@ -23,6 +23,17 @@ class MainFragment :
 
     override fun initObservers() = with(viewModel) {
 
+        adapter.callBackBtnStopServer = { baseUrl, action ->
+
+            alertDialog(
+                titleAlert = "Предупреждение",
+                bodyText = "Подтвердите действие",
+                positiveBtnLogic = {
+                    viewModel.clickRedBtn(baseUrl, action)
+                })
+        }
+
+
         listConn.observe {
             adapter.submitList(it)
         }

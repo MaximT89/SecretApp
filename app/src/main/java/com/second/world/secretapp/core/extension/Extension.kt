@@ -84,12 +84,18 @@ fun Button.notActive(){
     isClickable = false
 }
 
-fun <T>MutableLiveData<List<T>?>.newList(someLogic : (data : T) -> T) {
+fun <T>MutableLiveData<List<T>?>.newListMain(someLogic : (data : T) -> T) {
     value.let { items ->
         value = items?.map {
             someLogic.invoke(it)
         }
     }
+}
+
+fun <T>MutableLiveData<List<T>?>.newListIo(someLogic : (data : T) -> T) {
+    postValue(value?.map {
+        someLogic.invoke(it)
+    })
 }
 
 fun createGradient(textView: TextView, colors: IntArray) {
