@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import com.second.world.secretapp.R
 import com.second.world.secretapp.core.bases.BaseActivity
@@ -36,13 +37,22 @@ class MainActivity : BaseActivity() {
     private fun initView() = with(binding) {
         btnLogout.click {
             viewModel.logout()
+            findNavController(R.id.nav_host_fragment).navigate(R.id.authFragment)
+            openLeftMenu()
+        }
+
+        btnScreenSettings.click {
+            openLeftMenu()
         }
     }
 
+    private fun openLeftMenu() {
+        if (binding.leftMenu.isVisible)binding.leftMenu.hide()
+        else binding.leftMenu.show()
+    }
+
     private fun initObservers()= with(viewModel){
-        userIsAuth.observe(this@MainActivity) { isAuth ->
-            if (!isAuth) findNavController(R.id.nav_host_fragment).navigate(R.id.authFragment)
-        }
+
     }
 
 

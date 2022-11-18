@@ -20,6 +20,7 @@ class AuthFragment :
     override fun initView() {
 
         createPhoneMask()
+        showTitle(false)
 
         // телефон будет получен в формате 9536506580
         // Запрос смс кода

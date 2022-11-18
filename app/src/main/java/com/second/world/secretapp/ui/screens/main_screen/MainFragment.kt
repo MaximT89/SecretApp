@@ -4,7 +4,7 @@ import androidx.fragment.app.viewModels
 import com.second.world.secretapp.core.bases.BaseFragment
 import com.second.world.secretapp.core.extension.hide
 import com.second.world.secretapp.core.extension.show
-import com.second.world.secretapp.data.main_screen.remote.model.response.ResponseMainScreen
+import com.second.world.secretapp.data.main_screen.remote.common.model.response.ResponseMainScreen
 import com.second.world.secretapp.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -13,14 +13,22 @@ class MainFragment :
     BaseFragment<FragmentMainBinding, MainViewModel>(FragmentMainBinding::inflate) {
     override val viewModel: MainViewModel by viewModels()
 
+    private val adapter = MainAdapter()
+
     override fun initView() = with(binding) {
         showTitle(true)
+
+        mainRecyclerView.adapter = adapter
     }
 
     override fun initObservers() = with(viewModel) {
 
+        listConn.observe {
+            adapter.submitList(it)
+        }
+
         mainScreenState.observe { state ->
-            when(state){
+            when (state) {
                 is MainScreenState.Error -> {
                     progressBar()
                     showError(state.messageError)
@@ -41,15 +49,15 @@ class MainFragment :
     }
 
     private fun showUi(data: ResponseMainScreen) {
-       updateTitle(data.data?.settings?.titleName!!)
+        updateTitle(data.data?.settings?.titleName!!)
     }
 
     private fun showError(messageError: String) {
         showSnackbar(messageError)
     }
 
-    private fun progressBar(progress: Boolean = false) = with(binding){
-        if(progress) progressBar.show()
+    private fun progressBar(progress: Boolean = false) = with(binding) {
+        if (progress) progressBar.show()
         else progressBar.hide()
     }
 }

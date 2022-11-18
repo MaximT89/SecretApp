@@ -10,6 +10,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -40,11 +41,25 @@ object NetworkModuleProvides {
             .retryOnConnectionFailure(true)
             .build()
 
+
+
+    @MainRetrofitClient
     @Singleton
     @Provides
-    fun provideRetrofitClient(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+    fun provideMainRetrofitClient(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .baseUrl(Constants.BASE_URL)
         .client(okHttpClient)
         .build()
+
+    @ConnRetrofitClient
+    @Singleton
+    @Provides
+    fun provideConnRetrofitClient(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl(Constants.CONN_CUSTOM_URL)
+        .client(okHttpClient)
+        .build()
+
+
 }

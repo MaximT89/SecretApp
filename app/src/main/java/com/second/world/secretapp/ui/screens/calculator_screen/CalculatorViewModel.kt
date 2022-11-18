@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.second.world.secretapp.core.bases.BaseViewModel
 import com.second.world.secretapp.core.constants.Constants
+import com.second.world.secretapp.core.extension.log
 import com.second.world.secretapp.core.navigation.Destinations
 import com.second.world.secretapp.data.app.local.AppPrefs
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -209,12 +210,17 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
 
     fun checkSecretPin(value: String) {
 
+        log("checkSecretPin open")
+
         if (value == Constants.ADMIN_PIN) {
             _allUserInput.value = ""
             _destination.value = Destinations.CALCULATOR_TO_ADMIN.id
         }
 
         if (value == _secretPinFromPref.value.toString()) {
+
+            log("value $value and _secretPinFromPref.value ${_secretPinFromPref.value.toString()}")
+
             _allUserInput.value = ""
             _destination.value =
                 if (_isAuth.value == true) {

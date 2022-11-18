@@ -1,4 +1,4 @@
-package com.second.world.secretapp.data.main_screen.remote.model.response
+package com.second.world.secretapp.data.main_screen.remote.common.model.response
 
 import com.google.gson.annotations.SerializedName
 
@@ -12,6 +12,15 @@ data class ResponseMainScreen(
 
 	@field:SerializedName("error")
 	val error: List<String?>? = null
+)
+
+data class StatusText(
+
+	@field:SerializedName("off")
+	val off: String? = null,
+
+	@field:SerializedName("on")
+	val on: String? = null
 )
 
 data class Conn(
@@ -32,22 +41,25 @@ data class Conn(
 	val ip: String? = null,
 
 	@field:SerializedName("action")
-	val action: String? = null
+	val action: String? = null,
+
+	@field:SerializedName("status_text")
+	val statusText: StatusText? = null
 )
 
-data class Settings(
-
-	@field:SerializedName("title_name")
-	val titleName: String? = null
-)
-
-data class SrvItem(
+data class  SrvItem(
 
 	@field:SerializedName("conn")
 	val conn: Conn? = null,
 
 	@field:SerializedName("name")
 	val name: String? = null
+)
+
+data class Settings(
+
+	@field:SerializedName("title_name")
+	val titleName: String? = null
 )
 
 data class Data(
