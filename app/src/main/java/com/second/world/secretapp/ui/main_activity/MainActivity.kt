@@ -1,12 +1,8 @@
-package com.second.world.secretapp.ui.screens
+package com.second.world.secretapp.ui.main_activity
 
-import android.opengl.Visibility
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.navigation.findNavController
 import com.second.world.secretapp.R
 import com.second.world.secretapp.core.bases.BaseActivity
 import com.second.world.secretapp.core.extension.click
@@ -40,12 +36,26 @@ class MainActivity : BaseActivity() {
 
         btnLogout.click {
             viewModel.logout()
-            findNavController(R.id.nav_host_fragment).navigate(R.id.authFragment)
+            navigateTo(R.id.authFragment)
             openLeftMenu()
         }
 
         btnScreenSettings.click {
             openLeftMenu()
+        }
+
+        menuBtnUsers.click {
+            navigateTo(R.id.usersAllFragment)
+            openLeftMenu()
+        }
+
+        menuBtnMainScreen.click {
+            navigateTo(R.id.mainFragment)
+            openLeftMenu()
+        }
+
+        btnAddUser.click {
+            navigateTo(Destinations.USERS_ALL_TO_USERS_ADD.id)
         }
     }
 
@@ -68,6 +78,11 @@ class MainActivity : BaseActivity() {
 
     fun updateTitle(title : String) {
         updateText(binding.titleText, title)
+    }
+
+    fun showBtnAddUser(visibility: Boolean){
+        if(visibility) binding.btnAddUser.show()
+        else binding.btnAddUser.hide()
     }
 
     fun showTitleField(visibility: Boolean){

@@ -2,6 +2,7 @@ package com.second.world.secretapp.ui.screens.main_screen
 
 import androidx.fragment.app.viewModels
 import com.second.world.secretapp.core.bases.BaseFragment
+import com.second.world.secretapp.core.extension.click
 import com.second.world.secretapp.core.extension.hide
 import com.second.world.secretapp.core.extension.show
 import com.second.world.secretapp.data.main_screen.remote.common.model.response.ResponseMainScreen
@@ -19,6 +20,10 @@ class MainFragment :
         showTitle(true)
 
         mainRecyclerView.adapter = adapter
+
+        btnPing.click {
+            viewModel.pingAllConnItem()
+        }
     }
 
     override fun initObservers() = with(viewModel) {

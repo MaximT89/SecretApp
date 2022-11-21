@@ -1,4 +1,4 @@
-package com.second.world.secretapp.ui.screens
+package com.second.world.secretapp.ui.main_activity
 
 import com.second.world.secretapp.core.bases.BaseViewModel
 import com.second.world.secretapp.data.app.local.AppPrefs

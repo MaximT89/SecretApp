@@ -57,4 +57,20 @@
             app:popUpTo="@id/nav_graph.xml"
             app:popUpToInclusive="true"/>
     </fragment>
+    <fragment
+        android:id="@+id/usersAllFragment"
+        android:name="com.second.world.secretapp.ui.screens.users_all_screen.UsersAllFragment"
+        android:label="fragment_users_all"
+        tools:layout="@layout/fragment_users_all" >
+        <action
+            android:id="@+id/action_usersAllFragment_to_usersAddFragment"
+            app:destination="@id/usersAddFragment"
+            app:popUpTo="@id/usersAddFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/usersAddFragment"
+        android:name="com.second.world.secretapp.ui.screens.users_add_screen.UsersAddFragment"
+        android:label="fragment_users_add"
+        tools:layout="@layout/fragment_users_add" />
 </navigation>

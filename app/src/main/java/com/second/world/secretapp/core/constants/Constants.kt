@@ -12,8 +12,6 @@ object Constants {
      *
      * protocol :// ip : port / action - данные берем из модели [ResponseMainScreen]
      */
-    var CONNECTION_BASE_URL = "http://156.67.53.74:8083/"
-//    var CONNECTION_BASE_URL = ""
 
     const val ADMIN_PIN = "11998899"
 }

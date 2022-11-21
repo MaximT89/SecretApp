@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class AuthCloudDataSource @Inject constructor(
     private val api: AuthService,
-    private val responseWrapper: ResponseWrapper,
+    private val responseWrapper: ResponseWrapper
 ) {
 
     suspend fun getSms(request: RequestGetSms) : BaseResult<ResponseGetSms, Failure> =

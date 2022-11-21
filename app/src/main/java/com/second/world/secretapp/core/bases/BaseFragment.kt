@@ -24,7 +24,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.second.world.secretapp.R
 import com.second.world.secretapp.core.extension.click
 import com.second.world.secretapp.databinding.CustomAlertDialogBinding
-import com.second.world.secretapp.ui.screens.MainActivity
+import com.second.world.secretapp.ui.main_activity.MainActivity
 import java.lang.IllegalArgumentException
 import kotlin.reflect.full.isSubclassOf
 
@@ -42,6 +42,8 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
     protected abstract val viewModel: VM
     protected var toolbar: Toolbar? = null
 
+    open val showBtnAddUser = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,6 +51,12 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
     ): View? {
         _viewBinding = inflate.invoke(inflater, container, false)
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        showBtnAddUser(showBtnAddUser)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,6 +74,10 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
 
     fun showTitle(status : Boolean = false) {
         (activity as MainActivity).showTitleField(status)
+    }
+
+    fun showBtnAddUser(status : Boolean) {
+        (activity as MainActivity).showBtnAddUser(status)
     }
 
     inline fun <reified T> readArguments(

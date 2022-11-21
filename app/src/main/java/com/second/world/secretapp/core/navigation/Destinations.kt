@@ -11,5 +11,7 @@ enum class Destinations(val id : Int) {
 
     AUTH_TO_MAIN(R.id.action_authFragment_to_mainFragment),
 
-    ADMIN_TO_CALCULATOR(R.id.action_adminFragment_to_calculatorFragment)
+    ADMIN_TO_CALCULATOR(R.id.action_adminFragment_to_calculatorFragment),
+
+    USERS_ALL_TO_USERS_ADD(R.id.action_usersAllFragment_to_usersAddFragment)
 }

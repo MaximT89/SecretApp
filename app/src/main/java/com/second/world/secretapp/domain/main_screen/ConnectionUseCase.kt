@@ -8,8 +8,8 @@ class ConnectionUseCase @Inject constructor() {
 
     fun constractBaseUrl(data : SrvItemUi) : String {
 
-        log("CONNECTION BASE URL: ${data.protocol}://${data.ip}/${data.port}/")
+        log("CONNECTION BASE URL: ${data.protocol}://${data.ip}:${data.port}/")
 
-        return "${data.protocol}://${data.ip}/${data.port}/"
+        return "${data.protocol}://${data.ip}:${data.port}/"
     }
 }

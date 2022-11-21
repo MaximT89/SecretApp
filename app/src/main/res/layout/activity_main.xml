@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.screens.MainActivity">
+    tools:context=".ui.main_activity.MainActivity">
 
     <RelativeLayout
         android:id="@+id/titleField"
@@ -31,14 +31,26 @@
             tools:text="@string/main_screen_title" />
 
         <ImageView
+            android:id="@+id/btnAddUser"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="13dp"
+            android:layout_marginTop="13dp"
+            android:layout_alignParentEnd="true"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:src="@drawable/ic_baseline_person_add_24" />
+
+        <ImageView
             android:id="@+id/btnScreenSettings"
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:layout_marginStart="13dp"
             android:layout_marginTop="13dp"
-            tools:src="@drawable/ic_baseline_menu_24"
             app:layout_constraintStart_toStartOf="@+id/titleText"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_baseline_menu_24" />
 
     </RelativeLayout>
 
@@ -61,7 +73,25 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:background="@color/light_blue"
-            android:text="@string/settings" />
+            android:text="@string/menu" />
+
+        <TextView
+            android:id="@+id/menuBtnMainScreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            style="@style/TextView.Standart"
+            android:visibility="visible"
+            android:text="@string/servers_management"/>
+
+        <TextView
+            android:id="@+id/menuBtnUsers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            style="@style/TextView.Standart"
+            android:visibility="visible"
+            android:text="@string/users"/>
 
         <View
             android:layout_width="match_parent"

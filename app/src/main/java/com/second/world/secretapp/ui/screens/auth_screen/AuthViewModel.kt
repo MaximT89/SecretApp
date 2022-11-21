@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.second.world.secretapp.core.bases.BaseResult
 import com.second.world.secretapp.core.bases.BaseViewModel
 import com.second.world.secretapp.core.bases.Dispatchers
-import com.second.world.secretapp.core.extension.log
 import com.second.world.secretapp.core.remote.Failure
 import com.second.world.secretapp.data.auth_screen.remote.model.requests.RequestGetSms
 import com.second.world.secretapp.data.auth_screen.remote.model.requests.RequestGetUserData

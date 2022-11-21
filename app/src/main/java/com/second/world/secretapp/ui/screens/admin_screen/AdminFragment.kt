@@ -6,7 +6,6 @@ import com.second.world.secretapp.core.extension.click
 import com.second.world.secretapp.core.extension.updateText
 import com.second.world.secretapp.core.navigation.Destinations
 import com.second.world.secretapp.databinding.FragmentAdminBinding
-import com.second.world.secretapp.ui.screens.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,6 +16,7 @@ class AdminFragment :
     // TODO: оставить вход только если есть права на нее
 
     override fun initView() = with(binding) {
+
         btnCopyToken.click { clipToBuffer(viewModel.token.value.toString()) }
 
         btnCopySecretPin.click { clipToBuffer(viewModel.secretPin.value.toString()) }

@@ -21,5 +21,4 @@ interface BaseSharedPreferences {
         override fun defaultPref(): SharedPreferences =
             context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE)
     }
-
 }

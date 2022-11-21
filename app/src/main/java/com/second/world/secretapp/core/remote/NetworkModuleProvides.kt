@@ -23,7 +23,6 @@ object NetworkModuleProvides {
     }
 
     @Provides
-    @Singleton
     fun provideOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         networkInterceptor: NetworkInterceptor,
@@ -40,8 +39,6 @@ object NetworkModuleProvides {
             .retryOnConnectionFailure(true)
             .build()
 
-
-
     @MainRetrofitClient
     @Singleton
     @Provides
@@ -50,14 +47,5 @@ object NetworkModuleProvides {
         .baseUrl(Constants.BASE_URL)
         .client(okHttpClient)
         .build()
-
-    @ConnRetrofitClient
-    @Provides
-    fun provideConnRetrofitClient(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl(Constants.CONNECTION_BASE_URL)
-        .client(okHttpClient)
-        .build()
-
 
 }

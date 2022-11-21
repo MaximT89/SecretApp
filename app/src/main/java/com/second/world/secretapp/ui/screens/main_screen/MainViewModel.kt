@@ -6,19 +6,20 @@ import androidx.lifecycle.viewModelScope
 import com.second.world.secretapp.core.bases.BaseResult
 import com.second.world.secretapp.core.bases.BaseViewModel
 import com.second.world.secretapp.core.bases.Dispatchers
-import com.second.world.secretapp.core.constants.Constants
 import com.second.world.secretapp.core.extension.log
 import com.second.world.secretapp.core.extension.newListIo
 import com.second.world.secretapp.core.remote.Failure
+import com.second.world.secretapp.core.remote.ResponseWrapper
 import com.second.world.secretapp.data.app.local.AppPrefs
 import com.second.world.secretapp.data.main_screen.remote.common.model.response.ResponseMainScreen
-import com.second.world.secretapp.data.main_screen.repository.ConnectionRepository
+import com.second.world.secretapp.data.main_screen.remote.conn_elements.services.ServiceConnectionItem
 import com.second.world.secretapp.data.main_screen.repository.MainScreenRepository
 import com.second.world.secretapp.domain.main_screen.ConnectionUseCase
 import com.second.world.secretapp.ui.screens.main_screen.model_ui.MapperConnDataToUI
 import com.second.world.secretapp.ui.screens.main_screen.model_ui.SrvItemUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,9 +27,10 @@ class MainViewModel @Inject constructor(
     private val appPrefs: AppPrefs,
     private val dispatchers: Dispatchers,
     private val repositoryMain: MainScreenRepository,
-    private val repositoryConn: ConnectionRepository,
     private val connMapper: MapperConnDataToUI,
-    private val connUseCase: ConnectionUseCase
+    private val connUseCase: ConnectionUseCase,
+    private val responseWrapper: ResponseWrapper,
+    private val okHttpClient: OkHttpClient
 ) : BaseViewModel() {
 
     private val _mainScreenState = MutableLiveData<MainScreenState>()
@@ -75,7 +77,7 @@ class MainViewModel @Inject constructor(
 
             dispatchers.launchUI(viewModelScope){
                 delay(1000)
-//                pingAllConnItem()
+                pingAllConnItem()
             }
 
         } else _mainScreenState.postValue(MainScreenState.Error("Произошла ошибка"))
@@ -84,45 +86,41 @@ class MainViewModel @Inject constructor(
     /**
      * В данном методе мы должны пингануть все объекты из присланных
      */
-    private fun pingAllConnItem() {
+    fun pingAllConnItem() {
 
-        log("сработало")
+        _listConn.value?.forEach { server ->
+            pingServer(server)
+        }
+    }
 
-        _listConn.value?.forEach { item ->
+    private fun pingServer(server: SrvItemUi?) {
+        dispatchers.launchBackground(viewModelScope) {
 
-            log("сработало 2")
+            val service = ServiceConnectionItem(connUseCase.constractBaseUrl(server!!), okHttpClient, responseWrapper)
+            val result = service.getApiData(server.ping!!)
 
-            dispatchers.launchBackground(viewModelScope) {
+            when (result) {
 
-                log("сработало для ${item?.id}")
+                // Если не удалось достучаться до пинг сервера значит ставим статус работы сервера false
+                is BaseResult.Error -> {
 
-                Constants.CONNECTION_BASE_URL = connUseCase.constractBaseUrl(item!!)
-                delay(1000)
+                    if (result.err.code == 1) pingServer(server)
 
-                val result = repositoryConn.pingItemConn(item.ping!!)
-
-                when (result) {
-
-                    // Если не удалось достучаться до пинг сервера значит ставим статус работы сервера false
-                    is BaseResult.Error -> {
-                        if (result.err.code != 0) {
-
-                            _listConn.newListIo {
-                                if (it?.id == item.id) it?.copy(workStatus = false)
-                                else it?.copy()
-                            }
-
-                        } else _mainScreenState.postValue(MainScreenState.NoInternet(result.err.message))
-                    }
-
-                    // Если не удалось достучаться до пинг сервера значит ставим статус работы сервера true
-                    is BaseResult.Success -> {
-
+                    else if (result.err.code != 0) {
                         _listConn.newListIo {
-                            if (it?.id == item.id) it?.copy(workStatus = true)
+                            if (it?.id == server.id) it?.copy(workStatus = false)
                             else it?.copy()
                         }
 
+                    } else _mainScreenState.postValue(MainScreenState.NoInternet(result.err.message))
+                }
+
+                // Если не удалось достучаться до пинг сервера значит ставим статус работы сервера true
+                is BaseResult.Success -> {
+
+                    _listConn.newListIo {
+                        if (it?.id == server.id) it?.copy(workStatus = true)
+                        else it?.copy()
                     }
                 }
             }
