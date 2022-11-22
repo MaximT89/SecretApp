@@ -80,6 +80,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         android:visibility="gone"
+        android:indeterminateTint="@color/Black"
         tools:visibility="visible"
         app:layout_constraintTop_toTopOf="parent" />
 

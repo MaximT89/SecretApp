@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.second.world.secretapp.core.extension.click
 import com.second.world.secretapp.data.users_feature.remote.model.response.UsersItem
 import com.second.world.secretapp.databinding.UsersAllHolderBinding
 
@@ -16,12 +17,16 @@ class UsersAllAdapter : RecyclerView.Adapter<UsersAllAdapter.UsersAllHolder>() {
             notifyDataSetChanged()
         }
 
+    var callBackUserAdapter : ((item: UsersItem?) -> Unit)? = null
+
     inner class UsersAllHolder(private val binding: UsersAllHolderBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: UsersItem?) = with(binding) {
             userName.text = "Имя : ${item?.name}"
             userPhone.text = "Тел. : +7${item?.phone}"
+
+            content.click { callBackUserAdapter?.invoke(item) }
         }
     }
 

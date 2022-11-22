@@ -1,6 +1,8 @@
 package com.second.world.secretapp.data.users_feature.remote.model.response
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 data class ResponseUsersAll(
 
@@ -8,7 +10,7 @@ data class ResponseUsersAll(
 	val result: Boolean? = null,
 
 	@field:SerializedName("data")
-	val data: Data? = null,
+	val data: DataUsersAll? = null,
 
 	@field:SerializedName("error")
 	val error: List<String?>? = null,
@@ -17,6 +19,7 @@ data class ResponseUsersAll(
 	val version: String? = null
 )
 
+@Parcelize
 data class UsersItem(
 
 	@field:SerializedName("phone")
@@ -33,7 +36,7 @@ data class UsersItem(
 
 	@field:SerializedName("id")
 	val id: Int? = null
-)
+) : Parcelable
 
 data class Text(
 
@@ -59,7 +62,7 @@ data class Text(
 	val titleUpdateUsersPage: String? = null,
 )
 
-data class Data(
+data class DataUsersAll(
 
 	@field:SerializedName("text")
 	val text: Text? = null,

@@ -35,6 +35,8 @@ class UsersAllViewModel @Inject constructor(
         }
     }
 
+    fun getTextSettings() = _modelTextSetting.value
+
     private fun errorGetAllUsers(result: BaseResult.Error<Failure>) {
         if (result.err.code == 1) getAllUsers()
         else if (result.err.code != 0) _usersAllState.postValue(UsersAllStates.Error(result.err.message))

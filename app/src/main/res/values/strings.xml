@@ -46,6 +46,9 @@
     <string name="active">Активность</string>
     <string name="create_user">Создать пользователя</string>
     <string name="main_page">Главная страница</string>
+    <string name="delete">Удалить</string>
+    <string name="cancel">отмена</string>
+    <string name="save">сохранить</string>
 
 
 </resources>

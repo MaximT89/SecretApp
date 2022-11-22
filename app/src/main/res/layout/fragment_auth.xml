@@ -185,6 +185,7 @@
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
             tools:layout_editor_absoluteX="158dp"
+            android:indeterminateTint="@color/Black"
             tools:layout_editor_absoluteY="538dp" />
 
         <TextView

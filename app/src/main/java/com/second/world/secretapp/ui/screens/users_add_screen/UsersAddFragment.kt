@@ -92,6 +92,8 @@ class UsersAddFragment :
 
         userPhoneField.hint = textSettings.phoneUserBtnText
         userNameField.hint = textSettings.nameUserBtnText
+
+        textSettings.titleAddUsersPage?.let { updateTitle(title = it) }
     }
 
     private fun createPhoneMask() {
