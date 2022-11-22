@@ -9,6 +9,7 @@ import com.second.world.secretapp.core.bases.Dispatchers
 import com.second.world.secretapp.core.remote.Failure
 import com.second.world.secretapp.data.users_feature.remote.model.response.ResponseUsersAll
 import com.second.world.secretapp.data.users_feature.repository.RepositoryUsers
+import com.second.world.secretapp.ui.screens.users_all_screen.model.TextSettingModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -21,11 +22,10 @@ class UsersAllViewModel @Inject constructor(
     private val _usersAllState = MutableLiveData<UsersAllStates>()
     val usersAllState: LiveData<UsersAllStates> = _usersAllState
 
-    init {
-        getAllUsers()
-    }
+    private val _modelTextSetting = MutableLiveData<TextSettingModel>()
+    val modelTextSetting : LiveData<TextSettingModel> = _modelTextSetting
 
-    private fun getAllUsers() {
+    fun getAllUsers() {
         _usersAllState.value = UsersAllStates.Loading
         dispatchers.launchBackground(viewModelScope) {
             when (val result = repository.getAllUsers()) {
@@ -42,7 +42,19 @@ class UsersAllViewModel @Inject constructor(
     }
 
     private fun successGetAllUsers(data: ResponseUsersAll) {
-        if (data.result!!) _usersAllState.postValue(UsersAllStates.Success(data))
+        if (data.result!!) {
+            _usersAllState.postValue(UsersAllStates.Success(data))
+
+            _modelTextSetting.postValue(TextSettingModel(
+                addUserBtnText = data.data?.text?.addUserBtnText,
+                nameUserBtnText = data.data?.text?.nameUserBtnText,
+                phoneUserBtnText = data.data?.text?.phoneUserBtnText,
+                saveUserBtnText = data.data?.text?.saveUserBtnText,
+                titleAddUsersPage = data.data?.text?.titleAddUsersPage,
+                titleAllUsersPage = data.data?.text?.titleAllUsersPage,
+                titleUpdateUsersPage = data.data?.text?.titleUpdateUsersPage
+            ))
+        }
         else _usersAllState.postValue(UsersAllStates.Error("Произошла ошибка"))
     }
 }

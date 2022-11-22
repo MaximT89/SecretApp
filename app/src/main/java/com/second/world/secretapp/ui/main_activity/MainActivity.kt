@@ -2,6 +2,7 @@ package com.second.world.secretapp.ui.main_activity
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.second.world.secretapp.R
 import com.second.world.secretapp.core.bases.BaseActivity
@@ -11,10 +12,15 @@ import com.second.world.secretapp.core.extension.show
 import com.second.world.secretapp.core.extension.updateText
 import com.second.world.secretapp.core.navigation.Destinations
 import com.second.world.secretapp.databinding.ActivityMainBinding
+import com.second.world.secretapp.ui.screens.users_all_screen.model.TextSettingModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
+
+    companion object {
+        const val TEXT_SETTING = "text_setting"
+    }
 
     val binding by lazy{
         ActivityMainBinding.inflate(layoutInflater)
@@ -55,7 +61,8 @@ class MainActivity : BaseActivity() {
         }
 
         btnAddUser.click {
-            navigateTo(Destinations.USERS_ALL_TO_USERS_ADD.id)
+            navigateTo(Destinations.USERS_ALL_TO_USERS_ADD.id,
+            bundleOf(TEXT_SETTING to viewModel.getTextSettings()))
         }
     }
 
@@ -75,9 +82,12 @@ class MainActivity : BaseActivity() {
 
     }
 
-
     fun updateTitle(title : String) {
         updateText(binding.titleText, title)
+    }
+
+    fun saveTextSettings(data : TextSettingModel) {
+        viewModel.saveTextSetting(data)
     }
 
     fun showBtnAddUser(visibility: Boolean){

@@ -82,7 +82,7 @@
             android:padding="15dp"
             style="@style/TextView.Standart"
             android:visibility="visible"
-            android:text="@string/servers_management"/>
+            android:text="@string/main_page"/>
 
         <TextView
             android:id="@+id/menuBtnUsers"

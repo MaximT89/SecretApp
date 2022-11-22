@@ -7,6 +7,7 @@ import com.second.world.secretapp.core.extension.show
 import com.second.world.secretapp.data.users_feature.remote.model.response.ResponseUsersAll
 import com.second.world.secretapp.data.users_feature.remote.model.response.UsersItem
 import com.second.world.secretapp.databinding.FragmentUsersAllBinding
+import com.second.world.secretapp.ui.main_activity.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,6 +26,12 @@ class UsersAllFragment :
         recyclerView.adapter = adapter
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        viewModel.getAllUsers()
+    }
+
     override fun initObservers() = with(viewModel) {
 
         usersAllState.observe { state ->
@@ -35,6 +42,12 @@ class UsersAllFragment :
                 is UsersAllStates.NoInternet -> showUi(showError = true, errorText = state.messageError)
                 is UsersAllStates.Success -> showUi(showListUsers = true, response = state.data)
             }
+        }
+
+
+        // TODO: отрефакторить
+        modelTextSetting.observe {
+            (activity as MainActivity).saveTextSettings(it)
         }
     }
 
