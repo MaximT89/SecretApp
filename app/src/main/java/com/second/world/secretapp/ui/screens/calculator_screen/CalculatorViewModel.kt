@@ -30,8 +30,8 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
 
     private val _operation = MutableLiveData(Operation.EMPTY)
 
-    private val _finalText = MutableLiveData<String>("")
-    val finalText: LiveData<String> = _finalText
+    private val _finalText = MutableLiveData(Pair("", true))
+    val finalText: LiveData<Pair<String, Boolean>> = _finalText
 
     init {
         checkUserIsAuth()
@@ -42,12 +42,16 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
     fun addNewValue(value: String) {
         updateUserInput(value)
 
+        log("_currentNumber.value before: ${_currentNumber.value!!}")
+
         _currentNumber.value = if (_currentNumber.value == "0") value
         else {
             if (_currentNumber.value?.length!! <= 13) _currentNumber.value.plus(value)
             else _currentNumber.value
         }
-        updateFinalText()
+
+        log("_currentNumber.value after: ${_currentNumber.value!!}")
+        updateFinalText(true)
     }
 
     fun setOperation(operation: Operation) {
@@ -59,13 +63,18 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
 
             _operation.value = operation
 
-            updateFinalText()
+            updateFinalText(true)
         } else {
+
+//            if (_currentNumber.value != "0") {
+//            }
 
             // TODO: надо проверять есть ли currentNumber если его нет то не производить операцию, а менять текущую операцию
 
             when (_operation.value!!) {
                 Operation.EMPTY -> {
+
+                    log("Operation.EMPTY work")
 
                     if (_resultCalculate.value == "0") _resultCalculate.value = _currentNumber.value
                     else _resultCalculate.value = _resultCalculate.value
@@ -73,7 +82,7 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
                     _currentNumber.value = "0"
 
                     _operation.value = operation
-                    updateFinalText()
+                    updateFinalText(true)
                 }
                 Operation.PLUS -> {
 
@@ -87,7 +96,7 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
                     _currentNumber.value = "0"
 
                     _operation.value = operation
-                    updateFinalText()
+                    updateFinalText(true)
                     if (_operation.value == Operation.EQUAL) logicEqual()
                 }
                 Operation.MINUS -> {
@@ -103,7 +112,7 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
                     _currentNumber.value = "0"
 
                     _operation.value = operation
-                    updateFinalText()
+                    updateFinalText(true)
                     if (_operation.value == Operation.EQUAL) logicEqual()
                 }
                 Operation.TIMES -> {
@@ -118,7 +127,7 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
                     _currentNumber.value = "0"
 
                     _operation.value = operation
-                    updateFinalText()
+                    updateFinalText(true)
                     if (_operation.value == Operation.EQUAL) logicEqual()
 
                 }
@@ -133,7 +142,7 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
                     _currentNumber.value = "0"
 
                     _operation.value = operation
-                    updateFinalText()
+                    updateFinalText(true)
                     if (_operation.value == Operation.EQUAL) logicEqual()
 
                 }
@@ -143,18 +152,24 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
     }
 
     private fun logicEqual() {
+
+        log("logicEqual work")
+
         _currentNumber.value = "0"
+        _resultCalculate.value = ""
         _operation.value = Operation.EMPTY
         _allUserInput.value = ""
     }
 
-    private fun updateFinalText() {
+    private fun updateFinalText(status : Boolean) {
 
-        _finalText.value =
-            _resultCalculate.value.plus(_operation.value?.equalString).plus(
-                if (_currentNumber.value == "0") ""
-                else _currentNumber.value
-            )
+        log("updateFinalText work")
+
+        _finalText.value = Pair(_resultCalculate.value.plus(_operation.value?.equalString).plus(
+            if (_currentNumber.value == "0") ""
+            else _currentNumber.value
+        ), status)
+
     }
 
     private fun updateUserInput(value: String) {
@@ -165,7 +180,7 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
         if (_currentNumber.value != "0") _currentNumber.value =
             (_currentNumber.value?.toDouble()?.div(100)).toString()
 
-        updateFinalText()
+        updateFinalText(true)
     }
 
     fun backspace() {
@@ -177,7 +192,7 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
             if (s == "") _currentNumber.value = "0"
             else _currentNumber.value = s
         }
-        updateFinalText()
+        updateFinalText(true)
     }
 
     fun clearCurrentNumber() {
@@ -185,14 +200,14 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
         _resultCalculate.value = ""
         _operation.value = Operation.EMPTY
         _allUserInput.value = ""
-        updateFinalText()
+        updateFinalText(true)
     }
 
     fun addComma() {
         val s = _currentNumber.value
         if (!s!!.contains(".")) {
             _currentNumber.value = _currentNumber.value.plus(".")
-            updateFinalText()
+            updateFinalText(true)
         }
     }
 
@@ -209,8 +224,6 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
     }
 
     fun checkSecretPin(value: String) {
-
-        log("checkSecretPin open")
 
         if (value == Constants.ADMIN_PIN) {
             _allUserInput.value = ""

@@ -8,7 +8,6 @@ import com.second.world.secretapp.data.main_screen.remote.common.source.MainScre
 import javax.inject.Inject
 
 class MainScreenRepository @Inject constructor(
-    private val appPrefs: AppPrefs,
     private val cloudDataSource: MainScreenCloudDataSource
 ) {
 

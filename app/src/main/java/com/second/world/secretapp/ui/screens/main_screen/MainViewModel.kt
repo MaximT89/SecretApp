@@ -39,6 +39,9 @@ class MainViewModel @Inject constructor(
     private val _listConn = MutableLiveData<List<SrvItemUi?>?>()
     val listConn: LiveData<List<SrvItemUi?>?> = _listConn
 
+    private val _listServiceConnections = MutableLiveData<MutableList<ServiceConnectionItem>>()
+    val listServiceConnections: LiveData<MutableList<ServiceConnectionItem>> = _listServiceConnections
+
     init {
         getMainScreenUi()
     }
@@ -89,15 +92,26 @@ class MainViewModel @Inject constructor(
     fun pingAllConnItem() {
 
         _listConn.value?.forEach { server ->
+
+            createServicesConnections(server)
+
             pingServer(server)
         }
+    }
+
+    private fun createServicesConnections(server: SrvItemUi?) {
+        val service = ServiceConnectionItem(connUseCase.constractBaseUrl(server!!), okHttpClient, responseWrapper, server.id!!)
+        _listServiceConnections.value?.add(service)
     }
 
     private fun pingServer(server: SrvItemUi?) {
         dispatchers.launchBackground(viewModelScope) {
 
-            val service = ServiceConnectionItem(connUseCase.constractBaseUrl(server!!), okHttpClient, responseWrapper)
-            val result = service.getApiData(server.ping!!)
+//            val service = ServiceConnectionItem(connUseCase.constractBaseUrl(server!!), okHttpClient, responseWrapper, server.id!!)
+
+            val service = _listServiceConnections.value?.filter { it.id == server!!.id }
+            val result = service?.get(0)?.getApiData(server?.ping!!)
+//            val result = service.getApiData(server.ping!!)
 
             when (result) {
 
@@ -141,7 +155,7 @@ class MainViewModel @Inject constructor(
     /**
      * Обработка нажатия на красную кнопку
      */
-    fun clickRedBtn(baseUrl: String, action: String) {
+    fun clickRedBtn(baseUrl: String, action: String, id: Int) {
 
         // TODO: сделать обработку нажатия, сделать апи
 

@@ -28,13 +28,13 @@ class MainFragment :
 
     override fun initObservers() = with(viewModel) {
 
-        adapter.callBackBtnStopServer = { baseUrl, action ->
+        adapter.callBackBtnStopServer = { baseUrl, action, id ->
 
             alertDialog(
                 titleAlert = "Предупреждение",
                 bodyText = "Подтвердите действие",
                 positiveBtnLogic = {
-                    viewModel.clickRedBtn(baseUrl, action)
+                    viewModel.clickRedBtn(baseUrl, action, id)
                 })
         }
 
