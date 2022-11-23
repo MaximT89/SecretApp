@@ -49,6 +49,7 @@
     <string name="delete">Удалить</string>
     <string name="cancel">отмена</string>
     <string name="save">сохранить</string>
+    <string name="ping_all">ping all</string>
 
 
 </resources>

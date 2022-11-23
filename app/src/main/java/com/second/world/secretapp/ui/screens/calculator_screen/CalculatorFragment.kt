@@ -63,12 +63,11 @@ class CalculatorFragment  : BaseFragment<FragmentCalculatorBinding,
         }
 
         viewModel.finalText.observe {
-            updateText(binding.finalDataText, it)
+            updateText(binding.finalDataText, it.first)
         }
 
         viewModel.allUserInput.observe{ userInput ->
             viewModel.checkSecretPin(userInput)
         }
-
     }
 }

@@ -37,7 +37,8 @@
         android:id="@+id/btnPing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ping"
+        android:text="@string/ping_all"
+        android:backgroundTint="@color/Black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -15,7 +15,7 @@ class ServiceConnectionItem @Inject constructor(
     baseUrl: String,
     okHttpClient : OkHttpClient,
     private val responseWrapper: ResponseWrapper,
-    val id : Int
+    val id : Int?
 ) {
 
     var retrofit: Retrofit = Retrofit.Builder()
