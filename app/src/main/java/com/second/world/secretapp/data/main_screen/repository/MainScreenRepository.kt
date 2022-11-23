@@ -8,9 +8,10 @@ import com.second.world.secretapp.data.main_screen.remote.common.source.MainScre
 import javax.inject.Inject
 
 class MainScreenRepository @Inject constructor(
-    private val cloudDataSource: MainScreenCloudDataSource
+    private val cloudDataSource: MainScreenCloudDataSource,
+    private val appPref : AppPrefs
 ) {
 
-    suspend fun getMainScreenSettings(lang: String): BaseResult<ResponseMainScreen, Failure> =
-        cloudDataSource.getMainScreenSettings(lang)
+    suspend fun getMainScreenSettings(): BaseResult<ResponseMainScreen, Failure> =
+        cloudDataSource.getMainScreenSettings(appPref.loadAppLang()!!)
 }

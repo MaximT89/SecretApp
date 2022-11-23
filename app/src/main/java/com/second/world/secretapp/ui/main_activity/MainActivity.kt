@@ -6,10 +6,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.second.world.secretapp.R
 import com.second.world.secretapp.core.bases.BaseActivity
-import com.second.world.secretapp.core.extension.click
-import com.second.world.secretapp.core.extension.hide
-import com.second.world.secretapp.core.extension.show
-import com.second.world.secretapp.core.extension.updateText
+import com.second.world.secretapp.core.extension.*
 import com.second.world.secretapp.core.navigation.Destinations
 import com.second.world.secretapp.databinding.ActivityMainBinding
 import com.second.world.secretapp.ui.screens.users_all_screen.model.TextSettingModel
@@ -22,11 +19,11 @@ class MainActivity : BaseActivity() {
         const val TEXT_SETTING = "text_setting"
     }
 
-    val binding by lazy{
+    val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    private val viewModel : MainActivityViewModel by viewModels()
+    private val viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,9 +58,19 @@ class MainActivity : BaseActivity() {
         }
 
         btnAddUser.click {
-            navigateTo(Destinations.USERS_ALL_TO_USERS_ADD.id,
-            bundleOf(TEXT_SETTING to viewModel.getTextSettings()))
+            navigateTo(
+                Destinations.USERS_ALL_TO_USERS_ADD.id,
+                bundleOf(TEXT_SETTING to viewModel.getTextSettings())
+            )
         }
+    }
+
+    fun showNotificationVersion(status: Boolean) {
+
+        log(tag = "VERSION", message = "showNotificationVersion work and new status : $status")
+
+        if (status) binding.notificationMainActivity.show()
+        else binding.notificationMainActivity.hide()
     }
 
     private fun openLeftMenu() {
@@ -78,24 +85,24 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun initObservers()= with(viewModel){
+    private fun initObservers() = with(viewModel) {
 
     }
 
-    fun updateTitle(title : String) {
+    fun updateTitle(title: String) {
         updateText(binding.titleText, title)
     }
 
-    fun saveTextSettings(data : TextSettingModel) {
+    fun saveTextSettings(data: TextSettingModel) {
         viewModel.saveTextSetting(data)
     }
 
-    fun showBtnAddUser(visibility: Boolean){
-        if(visibility) binding.btnAddUser.show()
+    fun showBtnAddUser(visibility: Boolean) {
+        if (visibility) binding.btnAddUser.show()
         else binding.btnAddUser.hide()
     }
 
-    fun showTitleField(visibility: Boolean){
+    fun showTitleField(visibility: Boolean) {
         if (visibility) binding.titleField.show()
         else binding.titleField.hide()
     }

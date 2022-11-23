@@ -221,6 +221,10 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
         requireActivity().getString(id)
     }
 
+    fun showNotificationVersion(status : Boolean){
+        (activity as MainActivity).showNotificationVersion(status)
+    }
+
     /**
      * Выносим логику навигации в базовый фрагмент, во фрагментах используем метод [navigateTo]
      */

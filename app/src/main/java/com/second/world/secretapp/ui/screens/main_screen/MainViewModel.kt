@@ -3,9 +3,11 @@ package com.second.world.secretapp.ui.screens.main_screen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.second.world.secretapp.BuildConfig
 import com.second.world.secretapp.core.bases.BaseResult
 import com.second.world.secretapp.core.bases.BaseViewModel
 import com.second.world.secretapp.core.bases.Dispatchers
+import com.second.world.secretapp.core.extension.log
 import com.second.world.secretapp.core.extension.newListIo
 import com.second.world.secretapp.core.remote.Failure
 import com.second.world.secretapp.core.remote.ResponseWrapper
@@ -13,6 +15,7 @@ import com.second.world.secretapp.data.app.local.AppPrefs
 import com.second.world.secretapp.data.main_screen.remote.common.model.response.ResponseMainScreen
 import com.second.world.secretapp.data.main_screen.remote.conn_elements.services.ServiceConnectionItem
 import com.second.world.secretapp.data.main_screen.repository.MainScreenRepository
+import com.second.world.secretapp.domain.app_interactor.AppInteractor
 import com.second.world.secretapp.domain.main_screen.ConnectionUseCase
 import com.second.world.secretapp.ui.screens.main_screen.model_ui.MapperConnDataToUI
 import com.second.world.secretapp.ui.screens.main_screen.model_ui.SrvItemUi
@@ -24,13 +27,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val appPrefs: AppPrefs,
     private val dispatchers: Dispatchers,
     private val repositoryMain: MainScreenRepository,
     private val connMapper: MapperConnDataToUI,
     private val connUseCase: ConnectionUseCase,
     private val responseWrapper: ResponseWrapper,
-    private val okHttpClient: OkHttpClient
+    private val okHttpClient: OkHttpClient,
+    private val appInteractor: AppInteractor
 ) : BaseViewModel() {
 
     private val _mainScreenState = MutableLiveData<MainScreenState>()
@@ -44,12 +47,8 @@ class MainViewModel @Inject constructor(
     }
 
     /**
-     * 1. Сперва получить весь список КНОПОК, смапить их в другой тип данных где нужно добавить id элементам
-     * 2. Записать кнопки в лив дату
-     * 3. После записи вызвать метод, где в цикле будут вызываться запросы для каждого элемента
-     * 4. Для каждого элемента получить данные и по id заменить данные
+     * Стартовый запрос серверов с сервера
      */
-
     private fun getMainScreenUi() {
 
         _mainScreenState.value = MainScreenState.Loading
@@ -57,7 +56,7 @@ class MainViewModel @Inject constructor(
         dispatchers.launchBackground(viewModelScope) {
 
             val result: BaseResult<ResponseMainScreen, Failure> =
-                repositoryMain.getMainScreenSettings(appPrefs.loadAppLang()!!)
+                repositoryMain.getMainScreenSettings()
 
             when (result) {
                 is BaseResult.Error -> errorResult(result)
@@ -75,12 +74,32 @@ class MainViewModel @Inject constructor(
             _mainScreenState.postValue(MainScreenState.Success(data))
             _listConn.postValue(connMapper.map(data.data?.srv))
 
-            dispatchers.launchUI(viewModelScope){
+            dispatchers.launchUI(viewModelScope) {
                 delay(1000)
                 pingAllConnItem()
             }
 
+            // TODO: Сверка версии приложения
+            // Сверка версии приложения, пока что не нужно
+            // checkVersion(data.version)
+
         } else _mainScreenState.postValue(MainScreenState.Error("Произошла ошибка"))
+    }
+
+    /**
+     * Сверка версии приложения и версии доступной
+     */
+    private fun checkVersion(version: String?) {
+
+        log(tag = "VERSION", message = "BuildConfig.VERSION_NAME = ${BuildConfig.VERSION_NAME}")
+        log(tag = "VERSION", message = "version = $version")
+
+        if (version != null) {
+            if (appInteractor.validateVersion(version)) _mainScreenState.postValue(
+                MainScreenState.VersionValidateState(false)
+            )
+            else _mainScreenState.postValue(MainScreenState.VersionValidateState(true))
+        }
     }
 
     /**
@@ -93,10 +112,18 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Пингуем отдельно выбранный сервер
+     */
     private fun pingServer(server: SrvItemUi?) {
         dispatchers.launchBackground(viewModelScope) {
 
-            val service = ServiceConnectionItem(connUseCase.constractBaseUrl(server!!), okHttpClient, responseWrapper, server.id)
+            val service = ServiceConnectionItem(
+                connUseCase.constractBaseUrl(server!!),
+                okHttpClient,
+                responseWrapper,
+                server.id
+            )
             val result = service.getApiData(server.ping!!)
 
             when (result) {
@@ -105,7 +132,6 @@ class MainViewModel @Inject constructor(
                 is BaseResult.Error -> {
 
                     if (result.err.code == 1) pingServer(server)
-
                     else if (result.err.code != 0) {
                         _listConn.newListIo {
                             if (it?.id == server.id) it?.copy(workStatus = false)
@@ -143,11 +169,16 @@ class MainViewModel @Inject constructor(
      */
     fun clickRedBtn(server: SrvItemUi) {
 
-        dispatchers.launchBackground(viewModelScope){
-            val service = ServiceConnectionItem(connUseCase.constractBaseUrl(server), okHttpClient, responseWrapper, server.id)
+        dispatchers.launchBackground(viewModelScope) {
+            val service = ServiceConnectionItem(
+                connUseCase.constractBaseUrl(server),
+                okHttpClient,
+                responseWrapper,
+                server.id
+            )
             val result = service.redBtnClick(server.action!!)
 
-            when(result){
+            when (result) {
                 is BaseResult.Error -> {
                     if (result.err.code == 1) clickRedBtn(server)
                     else if (result.err.code != 0)
@@ -159,7 +190,6 @@ class MainViewModel @Inject constructor(
             }
         }
     }
-
 
 
 }
@@ -177,6 +207,9 @@ sealed class MainScreenState {
 
     // Загрузка при каких то долгих запросах
     object Loading : MainScreenState()
+
+    // State для проверки новой версии приложения
+    class VersionValidateState(val showNotification: Boolean) : MainScreenState()
 
     class SuccessRedBtn(val data: ResponseBody) : MainScreenState()
 

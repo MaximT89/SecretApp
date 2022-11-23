@@ -50,6 +50,7 @@
     <string name="cancel">отмена</string>
     <string name="save">сохранить</string>
     <string name="ping_all">ping all</string>
+    <string name="new_version_text">Имеется новая версия, обратитесь к администратору</string>
 
 
 </resources>

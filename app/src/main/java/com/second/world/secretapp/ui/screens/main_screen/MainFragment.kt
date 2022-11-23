@@ -70,6 +70,10 @@ class MainFragment :
                     progressBar()
                     showSnackbar(state.data.toString())
                 }
+
+                is MainScreenState.VersionValidateState -> {
+                    showNotificationVersion(state.showNotification)
+                }
             }
         }
     }
