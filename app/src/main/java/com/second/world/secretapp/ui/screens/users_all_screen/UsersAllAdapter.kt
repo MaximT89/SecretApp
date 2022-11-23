@@ -26,6 +26,14 @@ class UsersAllAdapter : RecyclerView.Adapter<UsersAllAdapter.UsersAllHolder>() {
             userName.text = "Имя : ${item?.name}"
             userPhone.text = "Тел. : +7${item?.phone}"
 
+            if(item?.active == null || item.active == 0) {
+                userActive.text = "Активность. : Нет"
+            } else if(item.active == 1) {
+                userActive.text = "Активность. : Да"
+            } else {
+                userActive.text = "Активность. : Нет"
+            }
+
             content.click { callBackUserAdapter?.invoke(item) }
         }
     }

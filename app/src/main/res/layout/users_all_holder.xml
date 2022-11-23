@@ -38,6 +38,16 @@
             app:layout_constraintTop_toBottomOf="@+id/userName"
             tools:text="Тел.: +79536506580" />
 
+        <TextView
+            android:id="@+id/userActive"
+            style="@style/TextView.Standart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userPhone"
+            tools:text="Активность: Да" />
+
         <ImageView
             android:id="@+id/btnEdit"
             android:layout_width="30dp"

@@ -17,6 +17,7 @@ class MapperConnDataToUI @Inject constructor(): Mapper<List<SrvItem?>?, List<Srv
                 ping = it?.conn?.ping,
                 ip = it?.conn?.ip,
                 action = it?.conn?.action,
+                actionTest = it?.conn?.actionTest,
                 textStatusOn = it?.conn?.statusText?.on,
                 textStatusOff = it?.conn?.statusText?.off,
                 name = it?.name,

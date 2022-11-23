@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.second.world.secretapp.core.bases.BaseResult
 import com.second.world.secretapp.core.bases.BaseViewModel
 import com.second.world.secretapp.core.bases.Dispatchers
-import com.second.world.secretapp.core.extension.log
 import com.second.world.secretapp.core.extension.newListIo
 import com.second.world.secretapp.core.remote.Failure
 import com.second.world.secretapp.core.remote.ResponseWrapper
@@ -20,6 +19,7 @@ import com.second.world.secretapp.ui.screens.main_screen.model_ui.SrvItemUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import javax.inject.Inject
 
 @HiltViewModel
@@ -141,11 +141,27 @@ class MainViewModel @Inject constructor(
     /**
      * Обработка нажатия на красную кнопку
      */
-    fun clickRedBtn(baseUrl: String, action: String, id: Int) {
+    fun clickRedBtn(server: SrvItemUi) {
 
-        // TODO: сделать обработку нажатия, сделать апи
+        dispatchers.launchBackground(viewModelScope){
+            val service = ServiceConnectionItem(connUseCase.constractBaseUrl(server), okHttpClient, responseWrapper, server.id)
+            val result = service.redBtnClick(server.action!!)
 
+            when(result){
+                is BaseResult.Error -> {
+                    if (result.err.code == 1) clickRedBtn(server)
+                    else if (result.err.code != 0)
+                        _mainScreenState.postValue(MainScreenState.ErrorRedBtn("ошибка отключения"))
+                    else
+                        _mainScreenState.postValue(MainScreenState.NoInternet(result.err.message))
+                }
+                is BaseResult.Success -> MainScreenState.SuccessRedBtn(result.data)
+            }
+        }
     }
+
+
+
 }
 
 sealed class MainScreenState {
@@ -161,4 +177,8 @@ sealed class MainScreenState {
 
     // Загрузка при каких то долгих запросах
     object Loading : MainScreenState()
+
+    class SuccessRedBtn(val data: ResponseBody) : MainScreenState()
+
+    class ErrorRedBtn(val messageError: String) : MainScreenState()
 }

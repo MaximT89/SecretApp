@@ -13,7 +13,7 @@ import com.second.world.secretapp.ui.screens.main_screen.model_ui.SrvItemUi
 
 class MainAdapter : ListAdapter<SrvItemUi, MainAdapter.MainViewHolder>(ItemComparator()) {
 
-    var callBackBtnStopServer: ((baseUrl: String, action: String, id: Int) -> Unit)? = null
+    var callBackBtnStopServer: ((item: SrvItemUi) -> Unit)? = null
 
     class ItemComparator : DiffUtil.ItemCallback<SrvItemUi>() {
         override fun areItemsTheSame(oldItem: SrvItemUi, newItem: SrvItemUi) =
@@ -29,7 +29,7 @@ class MainAdapter : ListAdapter<SrvItemUi, MainAdapter.MainViewHolder>(ItemCompa
             titleElement.text = item.name
 
             btnStopServer.click {
-                callBackBtnStopServer?.invoke(convertUrl(item), item.action!!, item.id!!)
+                callBackBtnStopServer?.invoke(item)
 
                 log("base: ${convertUrl(item)} // action: ${item.action!!}") // проверка что будет отдавать при клике на redBtn
             }

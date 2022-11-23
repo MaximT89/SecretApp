@@ -225,11 +225,6 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
 
     fun checkSecretPin(value: String) {
 
-        if (value == Constants.ADMIN_PIN) {
-            _allUserInput.value = ""
-            _destination.value = Destinations.CALCULATOR_TO_ADMIN.id
-        }
-
         if (value == _secretPinFromPref.value.toString()) {
 
             log("value $value and _secretPinFromPref.value ${_secretPinFromPref.value.toString()}")

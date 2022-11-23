@@ -28,13 +28,13 @@ class MainFragment :
 
     override fun initObservers() = with(viewModel) {
 
-        adapter.callBackBtnStopServer = { baseUrl, action, id ->
+        adapter.callBackBtnStopServer = { item ->
 
             alertDialog(
                 titleAlert = "Предупреждение",
                 bodyText = "Подтвердите действие",
                 positiveBtnLogic = {
-                    viewModel.clickRedBtn(baseUrl, action, id)
+                    viewModel.clickRedBtn(item)
                 })
         }
 
@@ -59,6 +59,16 @@ class MainFragment :
                 is MainScreenState.Success -> {
                     progressBar()
                     showUi(state.data)
+                }
+
+                is MainScreenState.ErrorRedBtn -> {
+                    progressBar()
+                    showSnackbar(state.messageError)
+                }
+
+                is MainScreenState.SuccessRedBtn -> {
+                    progressBar()
+                    showSnackbar(state.data.toString())
                 }
             }
         }

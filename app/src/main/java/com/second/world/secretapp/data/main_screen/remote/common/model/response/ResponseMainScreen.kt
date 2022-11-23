@@ -46,6 +46,9 @@ data class Conn(
     @field:SerializedName("action")
     val action: String? = null,
 
+    @field:SerializedName("action_test")
+    val actionTest: String? = null,
+
     @field:SerializedName("status_text")
     val statusText: StatusText? = null
 )

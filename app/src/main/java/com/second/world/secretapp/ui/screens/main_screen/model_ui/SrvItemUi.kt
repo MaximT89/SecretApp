@@ -9,6 +9,7 @@ data class SrvItemUi(
     val ping: String? = null,
     val ip: String? = null,
     val action: String? = null,
+    val actionTest: String? = null,
     val textStatusOn : String? = null,
     val textStatusOff : String? = null,
     val name: String? = null,
