@@ -1,8 +1,11 @@
 package com.second.world.secretapp.ui.screens.main_screen
 
+import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations.map
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.snackbar.Snackbar
 import com.second.world.secretapp.BuildConfig
 import com.second.world.secretapp.core.bases.BaseResult
 import com.second.world.secretapp.core.bases.BaseViewModel
@@ -24,6 +27,7 @@ import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import javax.inject.Inject
+import kotlin.time.TimeSource
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -79,6 +83,8 @@ class MainViewModel @Inject constructor(
                 pingAllConnItem()
             }
 
+            startPingServers()
+
             // TODO: Сверка версии приложения
             // Сверка версии приложения, пока что не нужно
             // checkVersion(data.version)
@@ -90,15 +96,10 @@ class MainViewModel @Inject constructor(
      * Сверка версии приложения и версии доступной
      */
     private fun checkVersion(version: String?) {
-
-        log(tag = "VERSION", message = "BuildConfig.VERSION_NAME = ${BuildConfig.VERSION_NAME}")
-        log(tag = "VERSION", message = "version = $version")
-
         if (version != null) {
-            if (appInteractor.validateVersion(version)) _mainScreenState.postValue(
-                MainScreenState.VersionValidateState(false)
+            _mainScreenState.postValue(
+                MainScreenState.VersionValidateState(!appInteractor.validateVersion(version))
             )
-            else _mainScreenState.postValue(MainScreenState.VersionValidateState(true))
         }
     }
 
@@ -124,7 +125,8 @@ class MainViewModel @Inject constructor(
                 responseWrapper,
                 server.id
             )
-            val result = service.getApiData(server.ping!!)
+
+            val result: BaseResult<Int, Failure> = service.getApiData(server.ping!!)
 
             when (result) {
 
@@ -153,15 +155,26 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun startPingServers() {
+        dispatchers.launchUI(viewModelScope) {
+            object : CountDownTimer(5000, 1000) {
+                override fun onTick(p0: Long) {}
+
+                override fun onFinish() {
+                    pingAllConnItem()
+                    startPingServers()
+                }
+            }.start()
+        }
+    }
+
     /**
      * Вынос обработки ошибки
      */
     private fun errorResult(result: BaseResult.Error<Failure>) {
         if (result.err.code == 1) getMainScreenUi()
-        else if (result.err.code != 0)
-            _mainScreenState.postValue(MainScreenState.Error(result.err.message))
-        else
-            _mainScreenState.postValue(MainScreenState.NoInternet(result.err.message))
+        else if (result.err.code != 0) _mainScreenState.postValue(MainScreenState.Error(result.err.message))
+        else _mainScreenState.postValue(MainScreenState.NoInternet(result.err.message))
     }
 
     /**
@@ -170,12 +183,14 @@ class MainViewModel @Inject constructor(
     fun clickRedBtn(server: SrvItemUi) {
 
         dispatchers.launchBackground(viewModelScope) {
+
             val service = ServiceConnectionItem(
                 connUseCase.constractBaseUrl(server),
                 okHttpClient,
                 responseWrapper,
                 server.id
             )
+
             val result = service.redBtnClick(server.action!!)
 
             when (result) {
@@ -190,8 +205,6 @@ class MainViewModel @Inject constructor(
             }
         }
     }
-
-
 }
 
 sealed class MainScreenState {
@@ -214,4 +227,7 @@ sealed class MainScreenState {
     class SuccessRedBtn(val data: ResponseBody) : MainScreenState()
 
     class ErrorRedBtn(val messageError: String) : MainScreenState()
+
+    // State для тестов
+    class Test(val testText: String) : MainScreenState()
 }

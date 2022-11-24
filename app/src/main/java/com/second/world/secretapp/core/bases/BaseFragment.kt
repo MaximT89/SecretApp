@@ -203,6 +203,9 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
         Snackbar.make(requireActivity(), binding.root, message, Snackbar.LENGTH_LONG).show()
     }
 
+    /**
+     * Функция копирования в буфер обмена
+     */
     fun clipToBuffer(str : String) {
         val clipboard = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
         val clip = ClipData.newPlainText("Copied Text", str)

@@ -11,13 +11,13 @@ import com.second.world.secretapp.databinding.UsersAllHolderBinding
 @SuppressLint("NotifyDataSetChanged, SetTextI18n")
 class UsersAllAdapter : RecyclerView.Adapter<UsersAllAdapter.UsersAllHolder>() {
 
-    var items : List<UsersItem?>? = null
+    var items: List<UsersItem?>? = null
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
-    var callBackUserAdapter : ((item: UsersItem?) -> Unit)? = null
+    var callBackUserAdapter: ((item: UsersItem?) -> Unit)? = null
 
     inner class UsersAllHolder(private val binding: UsersAllHolderBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -26,13 +26,8 @@ class UsersAllAdapter : RecyclerView.Adapter<UsersAllAdapter.UsersAllHolder>() {
             userName.text = "Имя : ${item?.name}"
             userPhone.text = "Тел. : +7${item?.phone}"
 
-            if(item?.active == null || item.active == 0) {
-                userActive.text = "Активность. : Нет"
-            } else if(item.active == 1) {
-                userActive.text = "Активность. : Да"
-            } else {
-                userActive.text = "Активность. : Нет"
-            }
+            if (item?.active == 1) userActive.text = "Активность. : Да"
+            else userActive.text = "Активность. : Нет"
 
             content.click { callBackUserAdapter?.invoke(item) }
         }

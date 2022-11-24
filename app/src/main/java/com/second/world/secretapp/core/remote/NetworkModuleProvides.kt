@@ -47,5 +47,4 @@ object NetworkModuleProvides {
         .baseUrl(Constants.BASE_URL)
         .client(okHttpClient)
         .build()
-
 }

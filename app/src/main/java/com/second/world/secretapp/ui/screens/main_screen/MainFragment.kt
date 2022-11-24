@@ -20,10 +20,6 @@ class MainFragment :
         showTitle(true)
 
         mainRecyclerView.adapter = adapter
-
-        btnPing.click {
-            viewModel.pingAllConnItem()
-        }
     }
 
     override fun initObservers() = with(viewModel) {
@@ -73,6 +69,10 @@ class MainFragment :
 
                 is MainScreenState.VersionValidateState -> {
                     showNotificationVersion(state.showNotification)
+                }
+
+                is MainScreenState.Test -> {
+                    showSnackbar(state.testText)
                 }
             }
         }
