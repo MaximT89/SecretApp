@@ -20,7 +20,6 @@ class AuthCloudDataSource @Inject constructor(
             api.getSmsRequest(request)
         }
 
-
     suspend fun getUserData(request: RequestGetUserData) : BaseResult<ResponseGetUserData, Failure> =
         responseWrapper.handleResponse {
             api.getUserDataRequest(request)
