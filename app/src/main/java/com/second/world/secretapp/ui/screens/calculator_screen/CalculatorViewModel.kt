@@ -1,5 +1,6 @@
 package com.second.world.secretapp.ui.screens.calculator_screen
 
+import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.second.world.secretapp.core.bases.BaseViewModel
@@ -32,6 +33,9 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
 
     private val _finalText = MutableLiveData(Pair("", true))
     val finalText: LiveData<Pair<String, Boolean>> = _finalText
+
+    // timer
+    private var timer : CountDownTimer? = null
 
     init {
         checkUserIsAuth()
@@ -227,15 +231,31 @@ class CalculatorViewModel @Inject constructor(private val appPrefs: AppPrefs) : 
 
         if (value == _secretPinFromPref.value.toString()) {
 
-            log("value $value and _secretPinFromPref.value ${_secretPinFromPref.value.toString()}")
+            startTimer {
+                _allUserInput.value = ""
+                _destination.value =
+                    if (_isAuth.value == true) {
+                        if (appPrefs.loadUserSecretPin() == 555) Destinations.CALCULATOR_TO_AUTH.id
+                        else Destinations.CALCULATOR_TO_MAIN.id
+                    } else Destinations.CALCULATOR_TO_AUTH.id
+            }
+        } else cancelTimer()
+    }
 
-            _allUserInput.value = ""
-            _destination.value =
-                if (_isAuth.value == true) {
-                    if (appPrefs.loadUserSecretPin() == 555) Destinations.CALCULATOR_TO_AUTH.id
-                    else Destinations.CALCULATOR_TO_MAIN.id
-                } else Destinations.CALCULATOR_TO_AUTH.id
-        }
+    fun startTimer(callFinishTimer : () -> Unit) {
+
+        timer = object : CountDownTimer(3000, 1000){
+            override fun onTick(p0: Long) {}
+
+            override fun onFinish() {
+                callFinishTimer.invoke()
+            }
+        }.start()
+    }
+
+    fun cancelTimer(){
+        timer?.cancel()
+        timer = null
     }
 }
 

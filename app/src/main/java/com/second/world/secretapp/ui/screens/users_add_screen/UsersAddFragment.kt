@@ -6,12 +6,8 @@ import com.second.world.secretapp.core.extension.click
 import com.second.world.secretapp.core.extension.hide
 import com.second.world.secretapp.core.extension.onlyDigits
 import com.second.world.secretapp.core.extension.show
-import com.second.world.secretapp.data.users_feature.remote.model.response.ResponseUsersAdd
-import com.second.world.secretapp.data.users_feature.remote.model.response.ResponseUsersAll
-import com.second.world.secretapp.data.users_feature.remote.model.response.UsersItem
 import com.second.world.secretapp.databinding.FragmentUsersAddBinding
 import com.second.world.secretapp.ui.main_activity.MainActivity
-import com.second.world.secretapp.ui.screens.users_all_screen.UsersAllStates
 import com.second.world.secretapp.ui.screens.users_all_screen.model.TextSettingModel
 import dagger.hilt.android.AndroidEntryPoint
 import ru.tinkoff.decoro.MaskImpl

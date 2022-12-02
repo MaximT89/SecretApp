@@ -33,14 +33,4 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="gone" />
 
-    <Button
-        android:id="@+id/btnPing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ping_all"
-        android:backgroundTint="@color/Black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
