@@ -59,7 +59,10 @@ data class SrvItem(
     val conn: Conn? = null,
 
     @field:SerializedName("name")
-    val name: String? = null
+    val name: String? = null,
+
+//    @field:SerializedName("next_screen_conn")
+//    val nextScreenConn: String? = null
 )
 
 data class Settings(

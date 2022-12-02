@@ -1,10 +1,15 @@
 package com.second.world.secretapp.ui.screens.main_screen
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.second.world.secretapp.R
 import com.second.world.secretapp.core.extension.click
 import com.second.world.secretapp.core.extension.log
 import com.second.world.secretapp.data.main_screen.common.Indicators
@@ -43,7 +48,6 @@ class MainAdapter : ListAdapter<SrvItemUi, MainAdapter.MainViewHolder>(ItemCompa
                     indicator.setBackgroundResource(Indicators.RED.image)
                 }
             }
-
         }
     }
 

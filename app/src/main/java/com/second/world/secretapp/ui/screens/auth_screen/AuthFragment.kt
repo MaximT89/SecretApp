@@ -1,6 +1,7 @@
 package com.second.world.secretapp.ui.screens.auth_screen
 
 import androidx.fragment.app.viewModels
+import com.second.world.secretapp.R
 import com.second.world.secretapp.core.bases.BaseFragment
 import com.second.world.secretapp.core.extension.*
 import com.second.world.secretapp.core.navigation.Destinations

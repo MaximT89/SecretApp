@@ -56,6 +56,7 @@ class CalculatorFragment  : BaseFragment<FragmentCalculatorBinding,
     }
 
     override fun initObservers() {
+
         viewModel.destination.observe { destination -> navigateTo(destination) }
 
         viewModel.currentNumber.observe {

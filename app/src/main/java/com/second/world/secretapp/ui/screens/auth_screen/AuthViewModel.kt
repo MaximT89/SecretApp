@@ -1,7 +1,9 @@
 package com.second.world.secretapp.ui.screens.auth_screen
 
+import android.R
 import android.os.CountDownTimer
 import android.text.TextUtils
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -33,6 +35,7 @@ class AuthViewModel @Inject constructor(
 
     init {
         checkUserAuth()
+
     }
 
     /**
@@ -61,6 +64,7 @@ class AuthViewModel @Inject constructor(
             if (repository.loadUserSecretPin() == 555) _authState.value = AuthState.ChangeSecretPin
             else _authState.value = AuthState.SuccessAuth
         }
+
     }
 
     /**

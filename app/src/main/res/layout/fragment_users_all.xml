@@ -32,7 +32,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/lorem_short" />
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
