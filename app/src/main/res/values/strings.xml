@@ -51,6 +51,7 @@
     <string name="save">сохранить</string>
     <string name="ping_all">ping all</string>
     <string name="new_version_text">Имеется новая версия, обратитесь к администратору</string>
+    <string name="message">Сообщение</string>
 
 
 </resources>

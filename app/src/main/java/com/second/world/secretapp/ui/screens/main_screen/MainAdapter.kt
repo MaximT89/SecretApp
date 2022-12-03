@@ -1,24 +1,18 @@
 package com.second.world.secretapp.ui.screens.main_screen
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.DrawableRes
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.second.world.secretapp.R
 import com.second.world.secretapp.core.extension.click
-import com.second.world.secretapp.core.extension.log
 import com.second.world.secretapp.data.main_screen.common.Indicators
 import com.second.world.secretapp.databinding.MainHolderBinding
 import com.second.world.secretapp.ui.screens.main_screen.model_ui.SrvItemUi
 
 class MainAdapter : ListAdapter<SrvItemUi, MainAdapter.MainViewHolder>(ItemComparator()) {
 
-    var callBackBtnStopServer: ((item: SrvItemUi) -> Unit)? = null
+    var callBackBtnStopServer: ((serverData: SrvItemUi) -> Unit)? = null
 
     class ItemComparator : DiffUtil.ItemCallback<SrvItemUi>() {
         override fun areItemsTheSame(oldItem: SrvItemUi, newItem: SrvItemUi) =
@@ -33,11 +27,7 @@ class MainAdapter : ListAdapter<SrvItemUi, MainAdapter.MainViewHolder>(ItemCompa
         fun bind(item: SrvItemUi) = with(binding) {
             titleElement.text = item.name
 
-            btnStopServer.click {
-                callBackBtnStopServer?.invoke(item)
-
-                log("base: ${convertUrl(item)} // action: ${item.action!!}") // проверка что будет отдавать при клике на redBtn
-            }
+            btnStopServer.click { callBackBtnStopServer?.invoke(item) }
 
             item.workStatus?.let {
                 if (it) {
@@ -56,7 +46,13 @@ class MainAdapter : ListAdapter<SrvItemUi, MainAdapter.MainViewHolder>(ItemCompa
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-        return MainViewHolder(MainHolderBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return MainViewHolder(
+            MainHolderBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {

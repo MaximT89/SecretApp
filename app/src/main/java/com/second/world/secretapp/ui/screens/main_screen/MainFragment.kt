@@ -21,19 +21,19 @@ class MainFragment :
         mainRecyclerView.adapter = adapter
     }
 
-    override fun initObservers() = with(viewModel) {
-
-        adapter.callBackBtnStopServer = { item ->
+    override fun initCallbacks() {
+        adapter.callBackBtnStopServer = { serverData ->
 
             alertDialog(
                 titleAlert = "Предупреждение",
                 bodyText = "Подтвердите действие",
                 positiveBtnLogic = {
-                    viewModel.clickRedBtn(item)
+                    viewModel.clickRedBtn(serverData)
                 })
         }
+    }
 
-
+    override fun initObservers() = with(viewModel) {
         listConn.observe {
             adapter.submitList(it)
         }

@@ -1,8 +1,10 @@
 package com.second.world.secretapp.ui.screens.users_all_screen
 
+import android.text.TextUtils
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.second.world.secretapp.core.bases.BaseFragment
+import com.second.world.secretapp.core.extension.click
 import com.second.world.secretapp.core.extension.hide
 import com.second.world.secretapp.core.extension.show
 import com.second.world.secretapp.core.navigation.Destinations
@@ -31,16 +33,32 @@ class UsersAllFragment :
         showTitle(true)
 
         recyclerView.adapter = adapter
+
+        // test logic
+        btnTest.click {
+            alertDialog(
+                positiveBtnLogic = { editText ->
+                    if (!TextUtils.isEmpty(editText)) showSnackbar("текст такой : $editText")
+                    else showSnackbar("вы не ввели текст")
+                },
+                needEditText = true,
+                needBodyText = false,
+                textPositiveBtn = "Отправить",
+                textNegativeBtn = "Отмена"
+            )
+        }
     }
 
     override fun initCallbacks() {
 
         adapter.callBackUserAdapter = { item ->
-            navigateTo(Destinations.USERS_ALL_TO_USERS_UPDATE.id,
-            bundleOf(
-                USER_DATA to item,
-                PAGE_TEXT_SETTINGS to viewModel.getTextSettings()
-            ))
+            navigateTo(
+                Destinations.USERS_ALL_TO_USERS_UPDATE.id,
+                bundleOf(
+                    USER_DATA to item,
+                    PAGE_TEXT_SETTINGS to viewModel.getTextSettings()
+                )
+            )
         }
     }
 

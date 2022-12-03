@@ -180,22 +180,22 @@ class MainViewModel @Inject constructor(
     /**
      * Обработка нажатия на красную кнопку
      */
-    fun clickRedBtn(server: SrvItemUi) {
+    fun clickRedBtn(serverData: SrvItemUi) {
 
         dispatchers.launchBackground(viewModelScope) {
 
             val service = ServiceConnectionItem(
-                connUseCase.constractBaseUrl(server),
+                connUseCase.constractBaseUrl(serverData),
                 okHttpClient,
                 responseWrapper,
-                server.id
+                serverData.id
             )
 
-            val result = service.redBtnClick(server.action!!)
+            val result = service.redBtnClick(serverData.action!!)
 
             when (result) {
                 is BaseResult.Error -> {
-                    if (result.err.code == 1) clickRedBtn(server)
+                    if (result.err.code == 1) clickRedBtn(serverData)
                     else if (result.err.code != 0)
                         _mainScreenState.postValue(MainScreenState.ErrorRedBtn("ошибка отключения"))
                     else
