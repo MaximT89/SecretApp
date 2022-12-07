@@ -15,6 +15,7 @@ import com.second.world.secretapp.ui.screens.main_screen.model_ui.SrvItemUi
 class MainAdapter : ListAdapter<SrvItemUi, MainAdapter.MainViewHolder>(ItemComparator()) {
 
     var callBackBtnStopServer: ((serverData: SrvItemUi) -> Unit)? = null
+    var callBackBtnGoServerUsers: (() -> Unit)? = null
 
     class ItemComparator : DiffUtil.ItemCallback<SrvItemUi>() {
         override fun areItemsTheSame(oldItem: SrvItemUi, newItem: SrvItemUi) =
@@ -29,10 +30,10 @@ class MainAdapter : ListAdapter<SrvItemUi, MainAdapter.MainViewHolder>(ItemCompa
         fun bind(item: SrvItemUi) = with(binding) {
             titleElement.text = item.name
 
+            item.nextScreenConn?.let { btnWatchUsers.show() }
+
             btnStopServer.click { callBackBtnStopServer?.invoke(item) }
 
-            if(item.nextScreenConn == null) btnWatchUsers.hide()
-            else btnWatchUsers.show()
 
             item.workStatus?.let {
                 if (it) {
