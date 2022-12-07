@@ -4,7 +4,7 @@ import com.second.world.secretapp.core.bases.Mapper
 import com.second.world.secretapp.data.server_feature.remote.common.model.response.SrvItem
 import javax.inject.Inject
 
-class MapperConnDataToUI @Inject constructor(): Mapper<List<SrvItem?>?, List<SrvItemUi?>?> {
+class MapperConnDataToUI @Inject constructor() : Mapper<List<SrvItem?>?, List<SrvItemUi?>?> {
     override fun map(data: List<SrvItem?>?): List<SrvItemUi?>? {
 
         fun getRandomId() = (1..999999).random()
@@ -21,7 +21,18 @@ class MapperConnDataToUI @Inject constructor(): Mapper<List<SrvItem?>?, List<Srv
                 textStatusOn = it?.conn?.statusText?.on,
                 textStatusOff = it?.conn?.statusText?.off,
                 name = it?.name,
-                id = getRandomId()
+                id = getRandomId(),
+                nextScreenConn = it?.nextScreenConn?.let { nextScreenConn ->
+                    NextScreenConnUI(
+                        protocol = nextScreenConn.protocol,
+                        method = nextScreenConn.method,
+                        port = nextScreenConn.port,
+                        ping = nextScreenConn.ping,
+                        ip = nextScreenConn.ip,
+                        action = nextScreenConn.action,
+                        actionTest = nextScreenConn.actionTest,
+                    )
+                }
             )
         }
     }

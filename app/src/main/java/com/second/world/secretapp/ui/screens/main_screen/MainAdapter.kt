@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.second.world.secretapp.core.extension.click
+import com.second.world.secretapp.core.extension.hide
+import com.second.world.secretapp.core.extension.show
 import com.second.world.secretapp.data.server_feature.common.Indicators
 import com.second.world.secretapp.databinding.MainHolderBinding
 import com.second.world.secretapp.ui.screens.main_screen.model_ui.SrvItemUi
@@ -28,6 +30,9 @@ class MainAdapter : ListAdapter<SrvItemUi, MainAdapter.MainViewHolder>(ItemCompa
             titleElement.text = item.name
 
             btnStopServer.click { callBackBtnStopServer?.invoke(item) }
+
+            if(item.nextScreenConn == null) btnWatchUsers.hide()
+            else btnWatchUsers.show()
 
             item.workStatus?.let {
                 if (it) {

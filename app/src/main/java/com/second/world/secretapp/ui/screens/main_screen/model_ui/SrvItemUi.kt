@@ -18,5 +18,16 @@ data class SrvItemUi(
     var indicator: Indicators? = null,
 
     var workStatus: Boolean? = null,
-    var loading: Boolean? = null
+    var loading: Boolean? = null,
+    var nextScreenConn: NextScreenConnUI? = null
+)
+
+data class NextScreenConnUI(
+    val protocol: String? = null,
+    val method: String? = null,
+    val port: String? = null,
+    val ping: Any? = null,
+    val ip: String? = null,
+    val action: String? = null,
+    val actionTest: Any? = null
 )
