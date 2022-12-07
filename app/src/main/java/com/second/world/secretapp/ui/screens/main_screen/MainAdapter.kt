@@ -10,12 +10,13 @@ import com.second.world.secretapp.core.extension.hide
 import com.second.world.secretapp.core.extension.show
 import com.second.world.secretapp.data.server_feature.common.Indicators
 import com.second.world.secretapp.databinding.MainHolderBinding
+import com.second.world.secretapp.ui.screens.main_screen.model_ui.NextScreenConnUI
 import com.second.world.secretapp.ui.screens.main_screen.model_ui.SrvItemUi
 
 class MainAdapter : ListAdapter<SrvItemUi, MainAdapter.MainViewHolder>(ItemComparator()) {
 
     var callBackBtnStopServer: ((serverData: SrvItemUi) -> Unit)? = null
-    var callBackBtnGoServerUsers: (() -> Unit)? = null
+    var callBackBtnGoServerUsers: ((nextScreenConn : NextScreenConnUI?) -> Unit)? = null
 
     class ItemComparator : DiffUtil.ItemCallback<SrvItemUi>() {
         override fun areItemsTheSame(oldItem: SrvItemUi, newItem: SrvItemUi) =
@@ -32,8 +33,9 @@ class MainAdapter : ListAdapter<SrvItemUi, MainAdapter.MainViewHolder>(ItemCompa
 
             item.nextScreenConn?.let { btnWatchUsers.show() }
 
-            btnStopServer.click { callBackBtnStopServer?.invoke(item) }
+            btnWatchUsers.click { callBackBtnGoServerUsers?.invoke(item.nextScreenConn) }
 
+            btnStopServer.click { callBackBtnStopServer?.invoke(item) }
 
             item.workStatus?.let {
                 if (it) {

@@ -92,7 +92,7 @@ data class NextScreenConn(
 	val port: String? = null,
 
 	@field:SerializedName("ping")
-	val ping: Any? = null,
+	val ping: String? = null,
 
 	@field:SerializedName("ip")
 	val ip: String? = null,
@@ -104,5 +104,5 @@ data class NextScreenConn(
 	val statusText: StatusText? = null,
 
 	@field:SerializedName("action_test")
-	val actionTest: Any? = null
+	val actionTest: String? = null
 )

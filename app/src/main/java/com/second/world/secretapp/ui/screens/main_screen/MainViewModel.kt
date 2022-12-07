@@ -12,7 +12,7 @@ import com.second.world.secretapp.core.remote.Failure
 import com.second.world.secretapp.core.remote.ResponseWrapper
 import com.second.world.secretapp.data.server_feature.remote.common.model.response.ResponseMainScreen
 import com.second.world.secretapp.data.server_feature.remote.conn_elements.model.ResponsePingServer
-import com.second.world.secretapp.data.server_feature.remote.conn_elements.services.ServiceConnectionItem
+import com.second.world.secretapp.data.server_feature.remote.conn_elements.client.ConnectionItemClient
 import com.second.world.secretapp.data.server_feature.repository.MainScreenRepository
 import com.second.world.secretapp.domain.app_interactor.AppInteractor
 import com.second.world.secretapp.domain.main_screen.ConnectionUseCase
@@ -40,6 +40,10 @@ class MainViewModel @Inject constructor(
 
     private val _listConn = MutableLiveData<List<SrvItemUi?>?>()
     val listConn: LiveData<List<SrvItemUi?>?> = _listConn
+
+    private val timer = MutableLiveData<CountDownTimer?>()
+    private val isRunningTimer = MutableLiveData(false)
+
 
     init {
         getMainScreenUi()
@@ -114,7 +118,7 @@ class MainViewModel @Inject constructor(
     private fun pingServer(server: SrvItemUi?) {
         dispatchers.launchBackground(viewModelScope) {
 
-            val service = ServiceConnectionItem(
+            val service = ConnectionItemClient(
                 connUseCase.constractBaseUrl(server!!),
                 okHttpClient,
                 responseWrapper,
@@ -158,14 +162,28 @@ class MainViewModel @Inject constructor(
 
     fun startPingServers() {
         dispatchers.launchUI(viewModelScope) {
-            object : CountDownTimer(5000, 1000) {
-                override fun onTick(p0: Long) {}
 
-                override fun onFinish() {
-                    pingAllConnItem()
-                    startPingServers()
-                }
-            }.start()
+            if(isRunningTimer.value == false){
+                timer.value = object : CountDownTimer(5000, 1000) {
+                    override fun onTick(p0: Long) {
+                        isRunningTimer.value = true
+                    }
+
+                    override fun onFinish() {
+                        isRunningTimer.value = false
+                        pingAllConnItem()
+                        startPingServers()
+                    }
+                }.start()
+            }
+        }
+    }
+
+    fun stopTimer() {
+        timer.value?.let {
+            it.cancel()
+            isRunningTimer.value = false
+            timer.value = null
         }
     }
 
@@ -185,7 +203,7 @@ class MainViewModel @Inject constructor(
 
         dispatchers.launchBackground(viewModelScope) {
 
-            val service = ServiceConnectionItem(
+            val service = ConnectionItemClient(
                 connUseCase.constractBaseUrl(serverData),
                 okHttpClient,
                 responseWrapper,
@@ -206,6 +224,7 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
 }
 
 sealed class MainScreenState {

@@ -22,7 +22,9 @@ object NetworkModuleProvides {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
+    // TODO: http client сделал как синглтон , нужно протестировать работу с одним инстансом
     @Provides
+    @Singleton
     fun provideOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         networkInterceptor: NetworkInterceptor,

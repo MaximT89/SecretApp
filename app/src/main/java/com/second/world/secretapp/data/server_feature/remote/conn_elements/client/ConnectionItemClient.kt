@@ -1,4 +1,4 @@
-package com.second.world.secretapp.data.server_feature.remote.conn_elements.services
+package com.second.world.secretapp.data.server_feature.remote.conn_elements.client
 
 import com.second.world.secretapp.core.bases.BaseResult
 import com.second.world.secretapp.core.remote.Failure
@@ -12,7 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
-class ServiceConnectionItem @Inject constructor(
+class ConnectionItemClient @Inject constructor(
     baseUrl: String,
     okHttpClient : OkHttpClient,
     private val responseWrapper: ResponseWrapper,

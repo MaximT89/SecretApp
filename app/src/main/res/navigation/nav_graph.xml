@@ -26,6 +26,9 @@
             app:destination="@id/authFragment"
             app:popUpTo="@id/authFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_mainFragment_to_serverUsersFragment"
+            app:destination="@id/serverUsersFragment" />
     </fragment>
     <fragment
         android:id="@+id/calculatorFragment"
@@ -83,4 +86,13 @@
         android:name="com.second.world.secretapp.ui.screens.users_detail_screen.UsersUpdateFragment"
         android:label="fragment_users_update"
         tools:layout="@layout/fragment_users_update" />
+    <fragment
+        android:id="@+id/serverUsersFragment"
+        android:name="com.second.world.secretapp.ui.screens.server_users.ServerUsersFragment"
+        android:label="fragment_server_users"
+        tools:layout="@layout/fragment_server_users" >
+        <action
+            android:id="@+id/action_serverUsersFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
 </navigation>
