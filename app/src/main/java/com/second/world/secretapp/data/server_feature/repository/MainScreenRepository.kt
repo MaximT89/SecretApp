@@ -1,10 +1,10 @@
-package com.second.world.secretapp.data.main_screen.repository
+package com.second.world.secretapp.data.server_feature.repository
 
 import com.second.world.secretapp.core.bases.BaseResult
 import com.second.world.secretapp.core.remote.Failure
 import com.second.world.secretapp.data.app.local.AppPrefs
-import com.second.world.secretapp.data.main_screen.remote.common.model.response.ResponseMainScreen
-import com.second.world.secretapp.data.main_screen.remote.common.source.MainScreenCloudDataSource
+import com.second.world.secretapp.data.server_feature.remote.common.model.response.ResponseMainScreen
+import com.second.world.secretapp.data.server_feature.remote.common.source.MainScreenCloudDataSource
 import javax.inject.Inject
 
 class MainScreenRepository @Inject constructor(

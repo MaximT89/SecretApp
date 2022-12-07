@@ -1,4 +1,4 @@
-package com.second.world.secretapp.data.main_screen.common
+package com.second.world.secretapp.data.server_feature.common
 
 import com.second.world.secretapp.R
 

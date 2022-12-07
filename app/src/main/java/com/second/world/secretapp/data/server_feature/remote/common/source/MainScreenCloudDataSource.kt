@@ -1,11 +1,11 @@
-package com.second.world.secretapp.data.main_screen.remote.common.source
+package com.second.world.secretapp.data.server_feature.remote.common.source
 
 import com.second.world.secretapp.core.bases.BaseResult
 import com.second.world.secretapp.core.remote.Failure
 import com.second.world.secretapp.core.remote.ResponseWrapper
-import com.second.world.secretapp.data.main_screen.remote.common.api.MainScreenService
-import com.second.world.secretapp.data.main_screen.remote.common.model.request.RequestMainScreen
-import com.second.world.secretapp.data.main_screen.remote.common.model.response.ResponseMainScreen
+import com.second.world.secretapp.data.server_feature.remote.common.api.MainScreenService
+import com.second.world.secretapp.data.server_feature.remote.common.model.request.RequestMainScreen
+import com.second.world.secretapp.data.server_feature.remote.common.model.response.ResponseMainScreen
 import javax.inject.Inject
 
 class MainScreenCloudDataSource @Inject constructor(

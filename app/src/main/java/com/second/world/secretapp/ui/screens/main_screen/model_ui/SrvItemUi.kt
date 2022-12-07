@@ -1,6 +1,6 @@
 package com.second.world.secretapp.ui.screens.main_screen.model_ui
 
-import com.second.world.secretapp.data.main_screen.common.Indicators
+import com.second.world.secretapp.data.server_feature.common.Indicators
 
 data class SrvItemUi(
     val protocol: String? = null,

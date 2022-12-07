@@ -1,13 +1,12 @@
-package com.second.world.secretapp.data.main_screen.remote.common.di
+package com.second.world.secretapp.data.server_feature.remote.common.di
 
 import com.second.world.secretapp.core.remote.MainRetrofitClient
-import com.second.world.secretapp.data.main_screen.remote.common.api.MainScreenService
+import com.second.world.secretapp.data.server_feature.remote.common.api.MainScreenService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
-import javax.inject.Named
 
 @Module
 @InstallIn(SingletonComponent::class)

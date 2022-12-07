@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
+import androidx.datastore.preferences.protobuf.StructOrBuilder
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -23,6 +24,8 @@ import com.second.world.secretapp.core.navigation.Navigator
 import com.google.android.material.snackbar.Snackbar
 import com.second.world.secretapp.R
 import com.second.world.secretapp.core.extension.click
+import com.second.world.secretapp.core.extension.hide
+import com.second.world.secretapp.core.extension.show
 import com.second.world.secretapp.databinding.CustomAlertDialogBinding
 import com.second.world.secretapp.ui.main_activity.MainActivity
 import java.lang.IllegalArgumentException
@@ -166,16 +169,46 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
             })
     }
 
+//    open fun customBackPressed(
+//        resId: Int? = null
+//    ) {
+//        requireActivity()
+//            .onBackPressedDispatcher
+//            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+//
+//                override fun handleOnBackPressed() {
+//                        if (isEnabled) {
+//                            isEnabled = false
+//                            resId?.let { findNavController().navigate(it) }
+//                        }
+//                    }
+//
+//            })
+//    }
+
     @SuppressLint("InflateParams")
     fun alertDialog(
-        positiveBtnLogic: () -> Unit = {},
+        positiveBtnLogic: (editTextMessage : String?) -> Unit = {},
         negativeBtnLogic: () -> Unit = {},
-        titleAlert: String,
-        bodyText: String
+        titleAlert: String = "Внимание",
+        bodyText: String = "Предупреждение",
+        needEditText : Boolean = false,
+        needBodyText : Boolean = true,
+        textPositiveBtn : String = "Да",
+        textNegativeBtn : String = "Нет"
     ) {
         val dialogViewBinding = CustomAlertDialogBinding.inflate(LayoutInflater.from(requireActivity())).apply {
             title.text = titleAlert
             body.text = bodyText
+
+            if(needBodyText) body.show()
+            else body.hide()
+
+            if (needEditText) editTextMessage.show()
+            else editTextMessage.hide()
+
+            btnPositive.text = textPositiveBtn
+            btnNegative.text = textNegativeBtn
         }
 
         val dialog = AlertDialog.Builder(requireActivity(), R.style.AlertDialog_Custom).create().apply {
@@ -184,7 +217,7 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
         }
 
         dialogViewBinding.btnPositive.click{
-            positiveBtnLogic.invoke()
+            positiveBtnLogic.invoke(dialogViewBinding.editTextMessage.text.toString())
             dialog.dismiss()
         }
 

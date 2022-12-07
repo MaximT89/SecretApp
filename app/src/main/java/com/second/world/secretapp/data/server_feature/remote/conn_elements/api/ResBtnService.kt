@@ -1,4 +1,4 @@
-package com.second.world.secretapp.data.main_screen.remote.conn_elements.api
+package com.second.world.secretapp.data.server_feature.remote.conn_elements.api
 
 import okhttp3.ResponseBody
 import retrofit2.Response

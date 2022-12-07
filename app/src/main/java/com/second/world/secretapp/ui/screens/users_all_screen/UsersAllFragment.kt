@@ -3,6 +3,7 @@ package com.second.world.secretapp.ui.screens.users_all_screen
 import android.text.TextUtils
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import com.second.world.secretapp.R
 import com.second.world.secretapp.core.bases.BaseFragment
 import com.second.world.secretapp.core.extension.click
 import com.second.world.secretapp.core.extension.hide
@@ -34,7 +35,7 @@ class UsersAllFragment :
 
         recyclerView.adapter = adapter
 
-        // test logic
+        // TODO: это для отправки сообщения для юзера
         btnTest.click {
             alertDialog(
                 positiveBtnLogic = { editText ->

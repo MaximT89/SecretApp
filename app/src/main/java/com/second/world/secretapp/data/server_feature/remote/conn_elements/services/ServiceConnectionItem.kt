@@ -1,10 +1,11 @@
-package com.second.world.secretapp.data.main_screen.remote.conn_elements.services
+package com.second.world.secretapp.data.server_feature.remote.conn_elements.services
 
 import com.second.world.secretapp.core.bases.BaseResult
 import com.second.world.secretapp.core.remote.Failure
 import com.second.world.secretapp.core.remote.ResponseWrapper
-import com.second.world.secretapp.data.main_screen.remote.conn_elements.api.ConnService
-import com.second.world.secretapp.data.main_screen.remote.conn_elements.api.ResBtnService
+import com.second.world.secretapp.data.server_feature.remote.conn_elements.api.ConnService
+import com.second.world.secretapp.data.server_feature.remote.conn_elements.api.ResBtnService
+import com.second.world.secretapp.data.server_feature.remote.conn_elements.model.ResponsePingServer
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
@@ -27,7 +28,7 @@ class ServiceConnectionItem @Inject constructor(
     val connApi : ConnService = retrofit.create(ConnService::class.java)
     val redBtnApi : ResBtnService = retrofit.create(ResBtnService::class.java)
 
-    suspend fun getApiData(url : String) : BaseResult<Int, Failure> {
+    suspend fun getPingResult(url : String) : BaseResult<ResponsePingServer, Failure> {
 
         return responseWrapper.handleResponse {
             connApi.connPingApi(url)

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.second.world.secretapp.core.extension.click
-import com.second.world.secretapp.data.main_screen.common.Indicators
+import com.second.world.secretapp.data.server_feature.common.Indicators
 import com.second.world.secretapp.databinding.MainHolderBinding
 import com.second.world.secretapp.ui.screens.main_screen.model_ui.SrvItemUi
 

@@ -4,7 +4,7 @@ import androidx.fragment.app.viewModels
 import com.second.world.secretapp.core.bases.BaseFragment
 import com.second.world.secretapp.core.extension.hide
 import com.second.world.secretapp.core.extension.show
-import com.second.world.secretapp.data.main_screen.remote.common.model.response.ResponseMainScreen
+import com.second.world.secretapp.data.server_feature.remote.common.model.response.ResponseMainScreen
 import com.second.world.secretapp.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 

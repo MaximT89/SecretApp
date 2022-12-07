@@ -3,21 +3,17 @@ package com.second.world.secretapp.ui.screens.main_screen
 import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations.map
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.snackbar.Snackbar
-import com.second.world.secretapp.BuildConfig
 import com.second.world.secretapp.core.bases.BaseResult
 import com.second.world.secretapp.core.bases.BaseViewModel
 import com.second.world.secretapp.core.bases.Dispatchers
-import com.second.world.secretapp.core.extension.log
 import com.second.world.secretapp.core.extension.newListIo
 import com.second.world.secretapp.core.remote.Failure
 import com.second.world.secretapp.core.remote.ResponseWrapper
-import com.second.world.secretapp.data.app.local.AppPrefs
-import com.second.world.secretapp.data.main_screen.remote.common.model.response.ResponseMainScreen
-import com.second.world.secretapp.data.main_screen.remote.conn_elements.services.ServiceConnectionItem
-import com.second.world.secretapp.data.main_screen.repository.MainScreenRepository
+import com.second.world.secretapp.data.server_feature.remote.common.model.response.ResponseMainScreen
+import com.second.world.secretapp.data.server_feature.remote.conn_elements.model.ResponsePingServer
+import com.second.world.secretapp.data.server_feature.remote.conn_elements.services.ServiceConnectionItem
+import com.second.world.secretapp.data.server_feature.repository.MainScreenRepository
 import com.second.world.secretapp.domain.app_interactor.AppInteractor
 import com.second.world.secretapp.domain.main_screen.ConnectionUseCase
 import com.second.world.secretapp.ui.screens.main_screen.model_ui.MapperConnDataToUI
@@ -27,7 +23,6 @@ import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import javax.inject.Inject
-import kotlin.time.TimeSource
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -126,7 +121,8 @@ class MainViewModel @Inject constructor(
                 server.id
             )
 
-            val result: BaseResult<Int, Failure> = service.getApiData(server.ping!!)
+            val result: BaseResult<ResponsePingServer, Failure> =
+                service.getPingResult(server.ping!!)
 
             when (result) {
 
@@ -134,24 +130,29 @@ class MainViewModel @Inject constructor(
                 is BaseResult.Error -> {
 
                     if (result.err.code == 1) pingServer(server)
-                    else if (result.err.code != 0) {
-                        _listConn.newListIo {
-                            if (it?.id == server.id) it?.copy(workStatus = false)
-                            else it?.copy()
-                        }
-
-                    } else _mainScreenState.postValue(MainScreenState.NoInternet(result.err.message))
+                    else if (result.err.code != 0) updateStatusServer(
+                        serverId = server.id,
+                        newStatus = false
+                    )
+                    else _mainScreenState.postValue(MainScreenState.NoInternet(result.err.message))
                 }
 
-                // Если не удалось достучаться до пинг сервера значит ставим статус работы сервера true
+                // Если удалось достучаться до пинг сервера значит ставим статус работы сервера true
                 is BaseResult.Success -> {
-
-                    _listConn.newListIo {
-                        if (it?.id == server.id) it?.copy(workStatus = true)
-                        else it?.copy()
-                    }
+                    if (result.data.result == true) updateStatusServer(
+                        serverId = server.id,
+                        newStatus = true
+                    )
+                    else updateStatusServer(serverId = server.id, newStatus = false)
                 }
             }
+        }
+    }
+
+    private fun updateStatusServer(serverId: Int?, newStatus: Boolean) {
+        _listConn.newListIo {
+            if (it?.id == serverId) it?.copy(workStatus = newStatus)
+            else it?.copy()
         }
     }
 

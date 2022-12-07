@@ -1,7 +1,7 @@
 package com.second.world.secretapp.ui.screens.main_screen.model_ui
 
 import com.second.world.secretapp.core.bases.Mapper
-import com.second.world.secretapp.data.main_screen.remote.common.model.response.SrvItem
+import com.second.world.secretapp.data.server_feature.remote.common.model.response.SrvItem
 import javax.inject.Inject
 
 class MapperConnDataToUI @Inject constructor(): Mapper<List<SrvItem?>?, List<SrvItemUi?>?> {

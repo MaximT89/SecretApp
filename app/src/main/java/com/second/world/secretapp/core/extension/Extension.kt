@@ -68,7 +68,7 @@ fun log(message: String) {
     Log.d("TAG", "log: $message")
 }
 
-fun log(tag: String, message: String) {
+fun log(tag: String = "TAG", message: String) {
     Log.d(tag, "log: $message")
 }
 
