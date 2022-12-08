@@ -132,7 +132,6 @@ class MainViewModel @Inject constructor(
 
                 // Если не удалось достучаться до пинг сервера значит ставим статус работы сервера false
                 is BaseResult.Error -> {
-
                     if (result.err.code == 1) pingServer(server)
                     else if (result.err.code != 0) updateStatusServer(
                         serverId = server.id,

@@ -6,6 +6,8 @@ import javax.inject.Inject
 
 class ServerUsersInteractor @Inject constructor() {
 
+
+
     fun constractBaseUrlServerUsers(coonUi : NextScreenConnUI) : String {
 
         log("CONNECTION BASE URL: ${coonUi.protocol}://${coonUi.ip}:${coonUi.port}/")

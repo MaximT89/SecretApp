@@ -37,16 +37,7 @@ class UsersAllFragment :
 
         // TODO: это для отправки сообщения для юзера
         btnTest.click {
-            alertDialog(
-                positiveBtnLogic = { editText ->
-                    if (!TextUtils.isEmpty(editText)) showSnackbar("текст такой : $editText")
-                    else showSnackbar("вы не ввели текст")
-                },
-                needEditText = true,
-                needBodyText = false,
-                textPositiveBtn = "Отправить",
-                textNegativeBtn = "Отмена"
-            )
+
         }
     }
 

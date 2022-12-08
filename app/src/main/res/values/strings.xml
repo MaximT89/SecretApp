@@ -52,6 +52,7 @@
     <string name="ping_all">ping all</string>
     <string name="new_version_text">Имеется новая версия, обратитесь к администратору</string>
     <string name="message">Сообщение</string>
+    <string name="send_user_message">send user message</string>
 
 
 </resources>

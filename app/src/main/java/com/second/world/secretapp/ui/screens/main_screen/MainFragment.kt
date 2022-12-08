@@ -1,11 +1,9 @@
 package com.second.world.secretapp.ui.screens.main_screen
 
-import android.os.CountDownTimer
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.second.world.secretapp.core.bases.BaseFragment
 import com.second.world.secretapp.core.extension.hide
-import com.second.world.secretapp.core.extension.log
 import com.second.world.secretapp.core.extension.show
 import com.second.world.secretapp.core.navigation.Destinations
 import com.second.world.secretapp.data.server_feature.remote.common.model.response.ResponseMainScreen
@@ -22,7 +20,6 @@ class MainFragment :
     companion object {
         const val NEXT_SCREEN_CONN_KEY = "next_screen_conn_key"
     }
-
 
     override fun initView() = with(binding) {
         showTitle(true)
@@ -59,13 +56,16 @@ class MainFragment :
                     progressBar()
                     showError(state.messageError)
                 }
+
                 MainScreenState.Loading -> {
                     progressBar(progress = true)
                 }
+
                 is MainScreenState.NoInternet -> {
                     progressBar()
                     showError(state.messageError)
                 }
+
                 is MainScreenState.Success -> {
                     progressBar()
                     showUi(state.data)

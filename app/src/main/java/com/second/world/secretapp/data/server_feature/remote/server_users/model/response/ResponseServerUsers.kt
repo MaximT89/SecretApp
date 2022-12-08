@@ -14,7 +14,7 @@ data class ResponseServerUsers(
 	val error: List<Any?>? = null
 )
 
-data class UsersItem(
+data class ServerUsersItem(
 
 	@field:SerializedName("time_sleep")
 	val timeSleep: String? = null,
@@ -50,5 +50,5 @@ data class ServerUsersData(
 	val count: Int? = null,
 
 	@field:SerializedName("users")
-	val users: List<UsersItem?>? = null
+	val users: List<ServerUsersItem?>? = null
 )
