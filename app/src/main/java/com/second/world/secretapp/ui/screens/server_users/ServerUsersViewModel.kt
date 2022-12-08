@@ -1,5 +1,6 @@
 package com.second.world.secretapp.ui.screens.server_users
 
+import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -8,16 +9,13 @@ import com.second.world.secretapp.core.bases.BaseViewModel
 import com.second.world.secretapp.core.bases.Dispatchers
 import com.second.world.secretapp.core.remote.Failure
 import com.second.world.secretapp.core.remote.ResponseWrapper
-import com.second.world.secretapp.data.server_feature.remote.common.model.response.ResponseMainScreen
 import com.second.world.secretapp.data.server_feature.remote.server_users.client.ServerUsersClient
 import com.second.world.secretapp.data.server_feature.remote.server_users.model.response.ResponseServerUsers
 import com.second.world.secretapp.data.server_feature.remote.server_users.model.response.ServerUsersItem
 import com.second.world.secretapp.domain.server_users_screen.ServerUsersInteractor
-import com.second.world.secretapp.ui.screens.main_screen.MainScreenState
 import com.second.world.secretapp.ui.screens.main_screen.model_ui.NextScreenConnUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,6 +32,7 @@ class ServerUsersViewModel @Inject constructor(
     private val _apiClient = MutableLiveData<ServerUsersClient>()
 
     private val _listServerUsers = MutableLiveData<List<ServerUsersItem?>?>()
+    val listServerUsers: LiveData<List<ServerUsersItem?>?> = _listServerUsers
 
     fun getSaveClientAndGetUsers(connItem: NextScreenConnUI) {
         createApiClient(connItem)
@@ -45,22 +44,27 @@ class ServerUsersViewModel @Inject constructor(
         dispatchers.launchBackground(viewModelScope) {
             // TODO: запросить данные с сервера через новый клиент
 
-            if(action != null){
+            if (action != null) {
 
-                val result: BaseResult<ResponseServerUsers, Failure>? = _apiClient.value?.getServerUsers(action)
+                val result: BaseResult<ResponseServerUsers, Failure>? =
+                    _apiClient.value?.getServerUsers(action)
 
-                when(result) {
+                when (result) {
                     is BaseResult.Error -> {
                         if (result.err.code == 1) getUsers(action)
-                        else if (result.err.code != 0)  _serverUsersState.postValue(ServerUsersState.Error(result.err.message))
+                        else if (result.err.code != 0) _serverUsersState.postValue(
+                            ServerUsersState.Error(
+                                result.err.message
+                            )
+                        )
                         else _serverUsersState.postValue(ServerUsersState.NoInternet(result.err.message))
                     }
 
                     is BaseResult.Success -> {
-                        if(result.data.result == true){
+                        if (result.data.result == true) {
                             _serverUsersState.postValue(ServerUsersState.Success(result.data))
                             _listServerUsers.postValue(result.data.data?.users)
-                        }else {
+                        } else {
                             _serverUsersState.postValue(ServerUsersState.Error("Ошибка: ответ от сервера успешен, но result = false"))
                         }
                     }
@@ -80,6 +84,18 @@ class ServerUsersViewModel @Inject constructor(
 
         _apiClient.value = apiClient
     }
+
+    fun getSearchResult(searchString: String?) {
+        if (TextUtils.isEmpty(searchString)) {
+            _serverUsersState.value = ServerUsersState.SuccessSearch(_listServerUsers.value)
+        } else {
+            _serverUsersState.value =
+                ServerUsersState.SuccessSearch(_listServerUsers.value?.filter {
+                    it?.userName?.contains(searchString.toString()) == true
+                })
+
+        }
+    }
 }
 
 sealed class ServerUsersState {
@@ -89,6 +105,9 @@ sealed class ServerUsersState {
 
     // Успешный запрос данных для страницы
     class Success(val data: ResponseServerUsers) : ServerUsersState()
+
+    // Успешный поиск
+    class SuccessSearch(val data: List<ServerUsersItem?>?) : ServerUsersState()
 
     // Состояние ошибки
     class Error(val messageError: String) : ServerUsersState()

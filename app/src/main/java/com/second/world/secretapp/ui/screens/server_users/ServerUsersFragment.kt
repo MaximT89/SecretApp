@@ -1,12 +1,14 @@
 package com.second.world.secretapp.ui.screens.server_users
 
 import android.text.TextUtils
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import com.second.world.secretapp.core.bases.BaseFragment
 import com.second.world.secretapp.core.extension.hide
 import com.second.world.secretapp.core.extension.log
 import com.second.world.secretapp.core.extension.show
 import com.second.world.secretapp.data.server_feature.remote.server_users.model.response.ResponseServerUsers
+import com.second.world.secretapp.data.server_feature.remote.server_users.model.response.ServerUsersItem
 import com.second.world.secretapp.databinding.FragmentServerUsersBinding
 import com.second.world.secretapp.ui.screens.main_screen.MainFragment
 import com.second.world.secretapp.ui.screens.main_screen.model_ui.NextScreenConnUI
@@ -19,18 +21,22 @@ class ServerUsersFragment :
 
     private val adapter = ServerUsersAdapter()
 
-    override fun initView() = with(binding) {
+    override fun initView()  {
         showTitle(true)
 
         updateTitle(title = "Пользователи")
 
-        recyclerViewServerUsers.adapter = adapter
+        binding.recyclerViewServerUsers.adapter = adapter
+
+        binding.serverUserSearch.addTextChangedListener {
+            viewModel.getSearchResult(it.toString())
+        }
     }
 
     override fun initObservers() = with(viewModel) {
 
         serverUsersState.observe { state ->
-            when (state) {
+             when (state) {
                 ServerUsersState.EmptyState -> {
                     updateUi(progress = true)
                 }
@@ -45,16 +51,15 @@ class ServerUsersFragment :
                     updateUi()
                 }
                 is ServerUsersState.Success -> {
-
-                    log(tag = "state", message = "успешно пришло во фрагмент")
                     updateUi(content = true, data = state.data)
-
                 }
                 is ServerUsersState.Test -> {
                     updateUi()
                 }
-            }
+                 is ServerUsersState.SuccessSearch -> updateUi(content = true, listData = state.data)
+             }
         }
+
     }
 
     override fun initCallbacks() {
@@ -91,7 +96,8 @@ class ServerUsersFragment :
     private fun updateUi(
         progress: Boolean = false,
         content: Boolean = false,
-        data: ResponseServerUsers? = null
+        data: ResponseServerUsers? = null,
+        listData : List<ServerUsersItem?>? = null
     ) = with(binding) {
         if (progress) progressBar.show()
         else progressBar.hide()
@@ -101,6 +107,10 @@ class ServerUsersFragment :
 
         if (data != null) {
             adapter.submitList(data.data?.users)
+        }
+
+        if (listData != null) {
+            adapter.submitList(listData)
         }
     }
 
