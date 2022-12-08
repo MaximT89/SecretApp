@@ -13,8 +13,8 @@ import com.second.world.secretapp.databinding.ServerUserHolderBinding
 
 class ServerUsersAdapter : ListAdapter<ServerUsersItem, ServerUsersAdapter.ServerUserHolder>(ItemComparator()){
 
-    var callBackServerUserSendMess : ((id : Int) -> Unit)? = null
-    var callBackServerUserRemove : ((id : Int) -> Unit)? = null
+    var callBackServerUserSendMess : ((userId : Int) -> Unit)? = null
+    var callBackServerUserRemove : ((userId : Int, userName : String) -> Unit)? = null
 
     class ItemComparator : DiffUtil.ItemCallback<ServerUsersItem>() {
         override fun areItemsTheSame(oldItem: ServerUsersItem, newItem: ServerUsersItem) =
@@ -38,7 +38,7 @@ class ServerUsersAdapter : ListAdapter<ServerUsersItem, ServerUsersAdapter.Serve
                 else imgActive.setBackgroundResource(Indicators.RED.image)
             }
 
-            btnRemoveUser.click { callBackServerUserRemove?.invoke(item.id!!) }
+            btnRemoveUser.click { callBackServerUserRemove?.invoke(item.id!!, item.userName!!) }
             btnSendMessage.click { callBackServerUserSendMess?.invoke(item.id!!) }
         }
     }

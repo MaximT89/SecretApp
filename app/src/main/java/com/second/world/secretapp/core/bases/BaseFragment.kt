@@ -169,23 +169,6 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
             })
     }
 
-//    open fun customBackPressed(
-//        resId: Int? = null
-//    ) {
-//        requireActivity()
-//            .onBackPressedDispatcher
-//            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-//
-//                override fun handleOnBackPressed() {
-//                        if (isEnabled) {
-//                            isEnabled = false
-//                            resId?.let { findNavController().navigate(it) }
-//                        }
-//                    }
-//
-//            })
-//    }
-
     @SuppressLint("InflateParams")
     fun alertDialog(
         positiveBtnLogic: (editTextMessage : String?) -> Unit = {},

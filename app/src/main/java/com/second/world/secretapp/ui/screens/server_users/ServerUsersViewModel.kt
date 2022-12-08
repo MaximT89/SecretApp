@@ -10,6 +10,7 @@ import com.second.world.secretapp.core.bases.Dispatchers
 import com.second.world.secretapp.core.remote.Failure
 import com.second.world.secretapp.core.remote.ResponseWrapper
 import com.second.world.secretapp.data.server_feature.remote.server_users.client.ServerUsersClient
+import com.second.world.secretapp.data.server_feature.remote.server_users.model.request.RequestSendMessage
 import com.second.world.secretapp.data.server_feature.remote.server_users.model.response.ResponseServerUsers
 import com.second.world.secretapp.data.server_feature.remote.server_users.model.response.ServerUsersItem
 import com.second.world.secretapp.domain.server_users_screen.ServerUsersInteractor
@@ -32,7 +33,6 @@ class ServerUsersViewModel @Inject constructor(
     private val _apiClient = MutableLiveData<ServerUsersClient>()
 
     private val _listServerUsers = MutableLiveData<List<ServerUsersItem?>?>()
-    val listServerUsers: LiveData<List<ServerUsersItem?>?> = _listServerUsers
 
     fun getSaveClientAndGetUsers(connItem: NextScreenConnUI) {
         createApiClient(connItem)
@@ -42,10 +42,8 @@ class ServerUsersViewModel @Inject constructor(
 
     private fun getUsers(action: String?) {
         dispatchers.launchBackground(viewModelScope) {
-            // TODO: запросить данные с сервера через новый клиент
 
             if (action != null) {
-
                 val result: BaseResult<ResponseServerUsers, Failure>? =
                     _apiClient.value?.getServerUsers(action)
 
@@ -74,6 +72,41 @@ class ServerUsersViewModel @Inject constructor(
         }
     }
 
+    fun sendServerUserMessage(userId: Int, message: String?) {
+
+        dispatchers.launchBackground(viewModelScope) {
+
+            val result =
+                _apiClient.value?.sendMessageServerUser(RequestSendMessage(userId, message))
+
+            when (result) {
+
+                is BaseResult.Error -> {
+                    if (result.err.code == 1) sendServerUserMessage(userId, message)
+                    else if (result.err.code != 0) _serverUsersState.postValue(
+                        ServerUsersState.ResultSendMessage(
+                            "Ошибка отправки сообщения"
+                        )
+                    )
+                    else _serverUsersState.postValue(ServerUsersState.NoInternet(result.err.message))
+                }
+
+                is BaseResult.Success -> {
+                    if (result.data.result == true) _serverUsersState.postValue(
+                        ServerUsersState.ResultSendMessage(
+                            "Сообщение успешно доставлено"
+                        )
+                    )
+                    else _serverUsersState.postValue(ServerUsersState.ResultSendMessage(
+                        "Ошибка: ответ от сервера успешен, но result = false"))
+                }
+
+                null -> _serverUsersState.postValue(ServerUsersState.ResultSendMessage(
+                    "Ошибка:Нулевой запрос"))
+            }
+        }
+    }
+
     private fun createApiClient(connItem: NextScreenConnUI) {
 
         val apiClient = ServerUsersClient(
@@ -96,6 +129,40 @@ class ServerUsersViewModel @Inject constructor(
 
         }
     }
+
+    fun blockServerUser(userId: Int, userName: String) {
+
+        dispatchers.launchBackground(viewModelScope){
+
+            val result = _apiClient.value?.blockServerUser(userName, userId)
+
+            when(result) {
+                is BaseResult.Error -> {
+                    if (result.err.code == 1) blockServerUser(userId, userName)
+                    else if (result.err.code != 0) _serverUsersState.postValue(
+                        ServerUsersState.ResultBlockUser(
+                            "Ошибка блокировки пользователя"
+                        )
+                    )
+                    else _serverUsersState.postValue(ServerUsersState.NoInternet(result.err.message))
+                }
+                is BaseResult.Success -> {
+                    if (result.data.result == true) _serverUsersState.postValue(
+                        ServerUsersState.ResultBlockUser(
+                            "Пользователь успешно заблокирован"
+                        )
+                    )
+                    else _serverUsersState.postValue(ServerUsersState.ResultBlockUser(
+                        "Ошибка: ответ от сервера успешен, но result = false"))
+                }
+                null -> _serverUsersState.postValue(ServerUsersState.ResultBlockUser(
+                    "Ошибка:Нулевой запрос"))
+            }
+
+
+        }
+
+    }
 }
 
 sealed class ServerUsersState {
@@ -108,6 +175,12 @@ sealed class ServerUsersState {
 
     // Успешный поиск
     class SuccessSearch(val data: List<ServerUsersItem?>?) : ServerUsersState()
+
+    // Результат отправки сообщения пользователю
+    class ResultSendMessage(val resultSendMessage: String) : ServerUsersState()
+
+    // Результат блокирования пользователя
+    class ResultBlockUser(val resultBlockUser: String) : ServerUsersState()
 
     // Состояние ошибки
     class Error(val messageError: String) : ServerUsersState()

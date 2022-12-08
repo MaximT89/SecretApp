@@ -21,7 +21,7 @@ class ServerUsersFragment :
 
     private val adapter = ServerUsersAdapter()
 
-    override fun initView()  {
+    override fun initView() {
         showTitle(true)
 
         updateTitle(title = "Пользователи")
@@ -36,7 +36,7 @@ class ServerUsersFragment :
     override fun initObservers() = with(viewModel) {
 
         serverUsersState.observe { state ->
-             when (state) {
+            when (state) {
                 ServerUsersState.EmptyState -> {
                     updateUi(progress = true)
                 }
@@ -56,33 +56,32 @@ class ServerUsersFragment :
                 is ServerUsersState.Test -> {
                     updateUi()
                 }
-                 is ServerUsersState.SuccessSearch -> updateUi(content = true, listData = state.data)
-             }
+                is ServerUsersState.SuccessSearch -> updateUi(content = true, listData = state.data)
+
+                is ServerUsersState.ResultSendMessage -> showSnackbar(state.resultSendMessage)
+
+                is ServerUsersState.ResultBlockUser -> showSnackbar(state.resultBlockUser)
+            }
         }
 
     }
 
     override fun initCallbacks() {
 
-        adapter.callBackServerUserRemove = {
+        adapter.callBackServerUserRemove = { userId, userName ->
             alertDialog(
                 positiveBtnLogic = {
-
-                    // TODO: реализовать запрос на отключение пользователя
-
+                    viewModel.blockServerUser(userId, userName)
                 },
                 bodyText = "Вы хотите отключить пользователя?"
             )
         }
 
-        adapter.callBackServerUserSendMess = {
+        adapter.callBackServerUserSendMess = { userId ->
             alertDialog(
                 positiveBtnLogic = { editText ->
                     if (!TextUtils.isEmpty(editText)) {
-
-                        // TODO: реализовать отправку сообщения пользователю на сервер
-
-                        showSnackbar("текст такой : $editText")
+                        viewModel.sendServerUserMessage(userId = userId, message = editText)
                     } else showSnackbar("вы не ввели текст")
                 },
                 needEditText = true,
@@ -97,7 +96,7 @@ class ServerUsersFragment :
         progress: Boolean = false,
         content: Boolean = false,
         data: ResponseServerUsers? = null,
-        listData : List<ServerUsersItem?>? = null
+        listData: List<ServerUsersItem?>? = null
     ) = with(binding) {
         if (progress) progressBar.show()
         else progressBar.hide()
