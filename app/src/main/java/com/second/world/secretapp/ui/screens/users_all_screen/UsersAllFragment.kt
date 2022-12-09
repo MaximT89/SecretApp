@@ -34,11 +34,6 @@ class UsersAllFragment :
         showTitle(true)
 
         recyclerView.adapter = adapter
-
-        // TODO: это для отправки сообщения для юзера
-        btnTest.click {
-
-        }
     }
 
     override fun initCallbacks() {

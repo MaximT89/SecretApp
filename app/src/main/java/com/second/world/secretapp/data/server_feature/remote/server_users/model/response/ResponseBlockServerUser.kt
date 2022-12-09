@@ -8,12 +8,12 @@ data class ResponseBlockServerUser(
 	val result: Boolean? = null,
 
 	@field:SerializedName("data")
-	val data: Data? = null,
+	val data: DataBlockServerUser? = null,
 
 	@field:SerializedName("error")
-	val error: List<Any?>? = null
+	val error: List<String?>? = null
 )
 
-data class Data(
+data class DataBlockServerUser(
 	val any: Any? = null
 )

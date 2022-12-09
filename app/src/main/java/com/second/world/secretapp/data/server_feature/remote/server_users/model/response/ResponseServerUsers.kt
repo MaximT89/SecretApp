@@ -11,7 +11,7 @@ data class ResponseServerUsers(
 	val data: ServerUsersData? = null,
 
 	@field:SerializedName("error")
-	val error: List<Any?>? = null
+	val error: List<String?>? = null
 )
 
 data class ServerUsersItem(

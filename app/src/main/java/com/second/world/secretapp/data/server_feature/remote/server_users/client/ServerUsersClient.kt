@@ -3,7 +3,6 @@ package com.second.world.secretapp.data.server_feature.remote.server_users.clien
 import com.second.world.secretapp.core.bases.BaseResult
 import com.second.world.secretapp.core.remote.Failure
 import com.second.world.secretapp.core.remote.ResponseWrapper
-import com.second.world.secretapp.data.server_feature.remote.conn_elements.model.ResponsePingServer
 import com.second.world.secretapp.data.server_feature.remote.server_users.api.ServerUsersService
 import com.second.world.secretapp.data.server_feature.remote.server_users.model.request.RequestSendMessage
 import com.second.world.secretapp.data.server_feature.remote.server_users.model.response.ResponseBlockServerUser
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 class ServerUsersClient @Inject constructor(
     baseUrl: String,
-    okHttpClient : OkHttpClient,
+    okHttpClient: OkHttpClient,
     private val responseWrapper: ResponseWrapper,
 ) {
     companion object {
@@ -24,29 +23,31 @@ class ServerUsersClient @Inject constructor(
         const val BLOCK_USER = "zzlcpepqy42o91oemyv0xzt7ztpqmjp36zxqyu5t/"
     }
 
-
     var retrofit: Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .baseUrl(baseUrl)
         .client(okHttpClient)
         .build()
 
-    val serverUsersApi : ServerUsersService = retrofit.create(ServerUsersService::class.java)
+    val serverUsersApi: ServerUsersService = retrofit.create(ServerUsersService::class.java)
 
-    suspend fun getServerUsers(url : String) : BaseResult<ResponseServerUsers, Failure> {
+    suspend fun getServerUsers(url: String): BaseResult<ResponseServerUsers, Failure> {
         return responseWrapper.handleResponse {
             serverUsersApi.getServerUsers(url)
         }
     }
 
-    suspend fun sendMessageServerUser(request :RequestSendMessage) : BaseResult<ResponseSendMessage, Failure> {
+    suspend fun sendMessageServerUser(request: RequestSendMessage): BaseResult<ResponseSendMessage, Failure> {
         return responseWrapper.handleResponse {
             serverUsersApi.sendMessageServerUser(request)
         }
     }
 
     // example "zzlcpepqy42o91oemyv0xzt7ztpqmjp36zxqyu5t/testuser/670/"
-    suspend fun blockServerUser(userName : String, userId : Int) : BaseResult<ResponseBlockServerUser, Failure> {
+    suspend fun blockServerUser(
+        userName: String,
+        userId: Int
+    ): BaseResult<ResponseBlockServerUser, Failure> {
         return responseWrapper.handleResponse {
             serverUsersApi.blockServerUser("$BLOCK_USER/$userName/$userId/")
         }

@@ -35,27 +35,21 @@ class ServerUsersFragment :
 
     override fun initObservers() = with(viewModel) {
 
+        // TODO: обработать все состояния
         serverUsersState.observe { state ->
             when (state) {
-                ServerUsersState.EmptyState -> {
-                    updateUi(progress = true)
-                }
-                is ServerUsersState.Error -> {
-                    log(tag = "state", message = "пришло с ошибкой во фрагмент")
-                    updateUi()
-                }
-                ServerUsersState.Loading -> {
-                    updateUi(progress = true)
-                }
-                is ServerUsersState.NoInternet -> {
-                    updateUi()
-                }
-                is ServerUsersState.Success -> {
-                    updateUi(content = true, data = state.data)
-                }
-                is ServerUsersState.Test -> {
-                    updateUi()
-                }
+                ServerUsersState.EmptyState -> updateUi(progress = true)
+
+                is ServerUsersState.Error -> updateUi()
+
+                ServerUsersState.Loading -> updateUi(progress = true)
+
+                is ServerUsersState.NoInternet -> updateUi()
+
+                is ServerUsersState.Success -> updateUi(content = true, data = state.data)
+
+                is ServerUsersState.Test -> updateUi()
+
                 is ServerUsersState.SuccessSearch -> updateUi(content = true, listData = state.data)
 
                 is ServerUsersState.ResultSendMessage -> showSnackbar(state.resultSendMessage)
@@ -63,7 +57,6 @@ class ServerUsersFragment :
                 is ServerUsersState.ResultBlockUser -> showSnackbar(state.resultBlockUser)
             }
         }
-
     }
 
     override fun initCallbacks() {
@@ -104,21 +97,14 @@ class ServerUsersFragment :
         if (content) recyclerViewServerUsers.show()
         else recyclerViewServerUsers.hide()
 
-        if (data != null) {
-            adapter.submitList(data.data?.users)
-        }
+        data?.let { adapter.submitList(it.data?.users) }
 
-        if (listData != null) {
-            adapter.submitList(listData)
-        }
+        listData?.let { adapter.submitList(it) }
     }
 
     override fun listenerBundleArguments() {
 
         readArguments<NextScreenConnUI>(MainFragment.NEXT_SCREEN_CONN_KEY,
-            ifExist = { connItem ->
-                viewModel.getSaveClientAndGetUsers(connItem)
-            })
-
+            ifExist = { connItem -> viewModel.getSaveClientAndGetUsers(connItem) })
     }
 }
