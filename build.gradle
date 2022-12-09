@@ -11,6 +11,7 @@ task clean(type: Delete) {
 }
 
 ext {
+    decoroVersion = '1.5.1'
     kotlinVersion = '1.7.10'
     pagingThree = '3.2.0-alpha02'
     lifecycleVersion = '2.5.1'

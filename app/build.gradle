@@ -39,8 +39,8 @@ android {
 
 dependencies {
 
-
-    implementation 'ru.tinkoff.decoro:decoro:1.5.1'
+    // Phone mask
+    implementation "ru.tinkoff.decoro:decoro:$rootProject.decoroVersion"
 
     // Kotlin reflect
     implementation "org.jetbrains.kotlin:kotlin-reflect:$rootProject.kotlinVersion"
