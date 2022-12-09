@@ -20,6 +20,8 @@ class UsersAddFragment :
     BaseFragment<FragmentUsersAddBinding, UsersAddViewModel>(FragmentUsersAddBinding::inflate) {
     override val viewModel: UsersAddViewModel by viewModels()
 
+    override val showBtnBack: Boolean = true
+
     override fun initView() = with(binding) {
         createPhoneMask()
 

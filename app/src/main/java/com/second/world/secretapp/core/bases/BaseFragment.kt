@@ -46,6 +46,7 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
     protected var toolbar: Toolbar? = null
 
     open val showBtnAddUser = false
+    open val showBtnBack = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,6 +61,7 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
         super.onStart()
 
         showBtnAddUser(showBtnAddUser)
+        showBtnBack(showBtnBack)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -81,6 +83,10 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
 
     fun showBtnAddUser(status : Boolean) {
         (activity as MainActivity).showBtnAddUser(status)
+    }
+
+    fun showBtnBack(status : Boolean) {
+        (activity as MainActivity).showBtnBack(status)
     }
 
     inline fun <reified T> readArguments(

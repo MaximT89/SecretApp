@@ -63,6 +63,14 @@ class MainActivity : BaseActivity() {
                 bundleOf(TEXT_SETTING to viewModel.getTextSettings())
             )
         }
+
+        btnCloseMenu.click {
+            openLeftMenu()
+        }
+
+        btnBackOnFragment.click {
+            navigateUp()
+        }
     }
 
     fun showNotificationVersion(status: Boolean) {
@@ -105,6 +113,11 @@ class MainActivity : BaseActivity() {
     fun showTitleField(visibility: Boolean) {
         if (visibility) binding.titleField.show()
         else binding.titleField.hide()
+    }
+
+    fun showBtnBack(visibility: Boolean) {
+        if (visibility) binding.btnBackOnFragment.show()
+        else binding.btnBackOnFragment.hide()
     }
 
 }

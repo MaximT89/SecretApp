@@ -21,6 +21,8 @@ class ServerUsersFragment :
 
     private val adapter = ServerUsersAdapter()
 
+    override val showBtnBack: Boolean = true
+
     override fun initView() {
         showTitle(true)
 
