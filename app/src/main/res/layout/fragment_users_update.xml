@@ -9,14 +9,19 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/userNameField"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColorHint="@color/black"
+        android:theme="@style/SearchTextInputLayoutStyle"
         app:boxBackgroundColor="@color/white"
-        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/black"
+        app:endIconMode="clear_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:startIconDrawable="@drawable/ic_baseline_person_24"
         tools:hint="Имя"
         tools:layout_editor_absoluteY="8dp">
 
@@ -25,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="false"
+            android:hint="Имя"
             tools:text="Maks" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -32,18 +38,21 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/userPhoneField"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:textColorHint="@color/black"
+        android:theme="@style/SearchTextInputLayoutStyle"
         app:boxBackgroundColor="@color/white"
-        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/black"
+        app:endIconMode="clear_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userNameField"
         app:prefixText="+7"
-        tools:hint="Телефон"
-        tools:layout_editor_absoluteY="8dp">
+        app:startIconDrawable="@drawable/ic_baseline_phone_enabled_24">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/phoneEditText"
@@ -51,6 +60,7 @@
             android:layout_height="wrap_content"
             android:enabled="false"
             android:inputType="phone"
+            android:hint="@string/phone_number"
             tools:text="9536506580" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -83,10 +93,10 @@
         android:layout_marginEnd="5dp"
         android:gravity="center"
         android:text="@string/delete"
+        app:drawableLeftCompat="@drawable/ic_baseline_delete_24"
         app:layout_constraintBottom_toBottomOf="@+id/activeCheckBox"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/activeCheckBox"
-        app:drawableLeftCompat="@drawable/ic_baseline_delete_24" />
+        app:layout_constraintTop_toTopOf="@+id/activeCheckBox" />
 
     <Button
         android:id="@+id/btnStartEdit"
@@ -97,40 +107,40 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible"
         app:layout_constraintTop_toBottomOf="@+id/errorText"
         tools:layout_editor_absoluteY="8dp"
-        tools:text="Редактировать" />
+        tools:text="Редактировать"
+        tools:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/btnSaveField"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center"
+        android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/errorText"
-        android:layout_height="wrap_content">
+        app:layout_constraintTop_toBottomOf="@+id/errorText">
 
         <Button
             android:id="@+id/btnSaveEdit"
             android:layout_width="0dp"
-            android:layout_weight="4"
             android:layout_height="wrap_content"
+            android:layout_weight="4"
             android:backgroundTint="@color/green"
             android:text="@string/save" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/btnCancelEdit"
             android:layout_width="0dp"
-            android:layout_weight="4"
             android:layout_height="wrap_content"
+            android:layout_weight="4"
             android:backgroundTint="@color/Black"
             android:text="@string/cancel"
             app:layout_constraintEnd_toEndOf="parent"
@@ -143,12 +153,12 @@
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:indeterminateTint="@color/Black"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        android:indeterminateTint="@color/Black"
         app:layout_constraintTop_toBottomOf="@+id/btnStartEdit"
         tools:visibility="visible" />
 

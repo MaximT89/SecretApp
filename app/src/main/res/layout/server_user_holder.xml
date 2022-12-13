@@ -40,7 +40,6 @@
 
             <TextView
                 android:id="@+id/userTimeSleep"
-                style="@style/TextView.Standart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
@@ -50,7 +49,6 @@
 
             <TextView
                 android:id="@+id/userTimeIn"
-                style="@style/TextView.Standart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
@@ -60,7 +58,6 @@
 
             <TextView
                 android:id="@+id/userActive"
-                style="@style/TextView.Standart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"

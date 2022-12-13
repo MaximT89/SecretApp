@@ -6,50 +6,51 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.second.world.secretapp.core.extension.click
+import com.second.world.secretapp.core.extension.hide
 import com.second.world.secretapp.core.extension.show
 import com.second.world.secretapp.data.server_feature.common.Indicators
+import com.second.world.secretapp.data.server_feature.remote.conn_elements.client.ConnectionItemClient
 import com.second.world.secretapp.databinding.MainHolderBinding
 import com.second.world.secretapp.ui.screens.main_screen.model_ui.NextScreenConnUI
 import com.second.world.secretapp.ui.screens.main_screen.model_ui.SrvItemUi
 
-class MainAdapter : ListAdapter<SrvItemUi, MainAdapter.MainViewHolder>(ItemComparator()) {
+class MainAdapter : ListAdapter<ConnectionItemClient, MainAdapter.MainViewHolder>(ItemComparator()) {
 
-    var callBackBtnStopServer: ((serverData: SrvItemUi) -> Unit)? = null
     var callBackBtnGoServerUsers: ((nextScreenConn : NextScreenConnUI?) -> Unit)? = null
+    var callBackBtnStopServer: ((serverId : Int) -> Unit)? = null
 
-    class ItemComparator : DiffUtil.ItemCallback<SrvItemUi>() {
-        override fun areItemsTheSame(oldItem: SrvItemUi, newItem: SrvItemUi) =
-            oldItem.hashCode() == newItem.hashCode()
+    class ItemComparator : DiffUtil.ItemCallback<ConnectionItemClient>() {
+        override fun areItemsTheSame(oldItem: ConnectionItemClient, newItem: ConnectionItemClient) =
+            oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: SrvItemUi, newItem: SrvItemUi) = oldItem == newItem
+        override fun areContentsTheSame(oldItem: ConnectionItemClient, newItem: ConnectionItemClient) = oldItem == newItem
     }
 
     inner class MainViewHolder(private val binding: MainHolderBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: SrvItemUi) = with(binding) {
-            titleElement.text = item.name
+        fun bind(item: ConnectionItemClient) = with(binding) {
 
-            item.nextScreenConn?.let { btnWatchUsers.show() }
+            titleElement.text = item.connUi?.name
 
-            btnWatchUsers.click { callBackBtnGoServerUsers?.invoke(item.nextScreenConn) }
+            if(item.connUi?.nextScreenConn != null) {
+                btnWatchUsers.show()
+            } else btnWatchUsers.hide()
 
-            btnStopServer.click { callBackBtnStopServer?.invoke(item) }
+            btnWatchUsers.click { callBackBtnGoServerUsers?.invoke(item.connUi?.nextScreenConn) }
 
-            item.workStatus?.let {
+            btnStopServer.click { callBackBtnStopServer?.invoke(item.id!!) }
+
+            item.serverWorkStatus?.let {
                 if (it) {
-                    statusServerWorkText.text = item.textStatusOn
-                    indicator.setBackgroundResource(Indicators.GREEN.image)
+                    statusServerWorkText.text = item.connUi?.textStatusOn
+                    indicator.setImageResource(Indicators.GREEN.image)
                 } else {
-                    statusServerWorkText.text = item.textStatusOff
-                    indicator.setBackgroundResource(Indicators.RED.image)
+                    statusServerWorkText.text = item.connUi?.textStatusOff
+                    indicator.setImageResource(Indicators.RED.image)
                 }
             }
         }
-    }
-
-    fun convertUrl(item: SrvItemUi): String {
-        return "${item.protocol}://${item.ip}:${item.port}/"
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {

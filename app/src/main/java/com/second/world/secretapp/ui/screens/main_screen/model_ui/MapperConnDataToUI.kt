@@ -7,8 +7,6 @@ import javax.inject.Inject
 class MapperConnDataToUI @Inject constructor() : Mapper<List<SrvItem?>?, List<SrvItemUi?>?> {
     override fun map(data: List<SrvItem?>?): List<SrvItemUi?>? {
 
-        fun getRandomId() = (1..999999).random()
-
         return data?.map {
             SrvItemUi(
                 protocol = it?.conn?.protocol,
@@ -21,7 +19,9 @@ class MapperConnDataToUI @Inject constructor() : Mapper<List<SrvItem?>?, List<Sr
                 textStatusOn = it?.conn?.statusText?.on,
                 textStatusOff = it?.conn?.statusText?.off,
                 name = it?.name,
-                id = getRandomId(),
+                id = it?.connId,
+                sort = it?.connSort,
+
                 nextScreenConn = it?.nextScreenConn?.let { nextScreenConn ->
                     NextScreenConnUI(
                         protocol = nextScreenConn.protocol,

@@ -11,7 +11,7 @@ data class ResponseMainScreen(
 	val data: Data? = null,
 
 	@field:SerializedName("error")
-	val error: List<Any?>? = null,
+	val error: List<String?>? = null,
 
 	@field:SerializedName("version")
 	val version: String? = null
@@ -68,7 +68,13 @@ data class SrvItem(
 	val nextScreenConn: NextScreenConn? = null,
 
 	@field:SerializedName("name")
-	val name: String? = null
+	val name: String? = null,
+
+	@field:SerializedName("id")
+	val connId: Int? = null,
+
+	@field:SerializedName("sort")
+	val connSort: Int? = null,
 )
 
 data class StatusText(

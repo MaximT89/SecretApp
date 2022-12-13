@@ -33,7 +33,7 @@
     <string name="second_edit_pin">Повторите PIN-код</string>
     <string name="btn_open">ок</string>
     <string name="get_sms_with_code">ок</string>
-    <string name="phone_number">Номер телефона</string>
+    <string name="phone_number">Телефон</string>
     <string name="clear_all_settings_app">откатить все настройки</string>
     <string name="main_screen_title">Управление API</string>
     <string name="settings">Настройки</string>
@@ -54,6 +54,7 @@
     <string name="message">Сообщение</string>
     <string name="send_user_message">send user message</string>
     <string name="search">Поиск</string>
+    <string name="wait">Ожидайте</string>
 
 
 </resources>

@@ -46,8 +46,9 @@ class MainFragment :
     }
 
     override fun initObservers() = with(viewModel) {
-        listConn.observe {
-            adapter.submitList(it)
+        listServerClients.observe { listServers ->
+            val sortList = listServers?.sortedBy { it?.connUi?.sort }
+            adapter.submitList(sortList)
         }
 
         mainScreenState.observe { state ->

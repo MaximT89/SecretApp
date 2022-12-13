@@ -15,6 +15,7 @@ data class SrvItemUi(
     val textStatusOn : String? = null,
     val textStatusOff : String? = null,
     val name: String? = null,
+    val sort: Int? = null,
 
     val id: Int? = null,
     var indicator: Indicators? = null,

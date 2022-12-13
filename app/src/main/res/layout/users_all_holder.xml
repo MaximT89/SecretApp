@@ -22,7 +22,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
-            android:background="@drawable/gradient_bg"
+            android:background="@drawable/bg_main_screen_item"
             android:layout_height="match_parent"
             android:padding="8dp">
 
@@ -39,7 +39,6 @@
 
             <TextView
                 android:id="@+id/userPhone"
-                style="@style/TextView.Standart"
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -50,7 +49,6 @@
 
             <TextView
                 android:id="@+id/userActive"
-                style="@style/TextView.Standart"
                 android:layout_width="wrap_content"
                 android:textColor="@color/white"
                 android:layout_height="wrap_content"
