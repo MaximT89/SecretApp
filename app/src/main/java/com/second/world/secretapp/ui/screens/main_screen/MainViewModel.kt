@@ -20,6 +20,7 @@ import com.second.world.secretapp.ui.screens.main_screen.model_ui.MapperConnData
 import com.second.world.secretapp.ui.screens.main_screen.model_ui.SrvItemUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import javax.inject.Inject
@@ -54,9 +55,11 @@ class MainViewModel @Inject constructor(
      */
     private fun getMainScreenUi() {
 
-        _mainScreenState.value = MainScreenState.Loading
-
         dispatchers.launchBackground(viewModelScope) {
+
+            withContext(kotlinx.coroutines.Dispatchers.Main){
+                _mainScreenState.value = MainScreenState.Loading
+            }
 
             val result: BaseResult<ResponseMainScreen, Failure> =
                 repositoryMain.getMainScreenSettings()

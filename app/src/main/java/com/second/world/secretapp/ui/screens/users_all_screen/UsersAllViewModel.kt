@@ -26,7 +26,7 @@ class UsersAllViewModel @Inject constructor(
     val modelTextSetting : LiveData<TextSettingModel> = _modelTextSetting
 
     fun getAllUsers() {
-        _usersAllState.value = UsersAllStates.Loading
+        _usersAllState.postValue(UsersAllStates.Loading)
         dispatchers.launchBackground(viewModelScope) {
             when (val result = repository.getAllUsers()) {
                 is BaseResult.Error -> errorGetAllUsers(result)
