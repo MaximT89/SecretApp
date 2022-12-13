@@ -31,7 +31,6 @@ class MainViewModel @Inject constructor(
     private val dispatchers: Dispatchers,
     private val repositoryMain: MainScreenRepository,
     private val connMapper: MapperConnDataToUI,
-    private val connUseCase: ConnectionUseCase,
     private val responseWrapper: ResponseWrapper,
     private val okHttpClient: OkHttpClient,
     private val appInteractor: AppInteractor,
