@@ -47,6 +47,7 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
 
     open val showBtnAddUser = false
     open val showBtnBack = false
+    open val showBtnOffAllServer = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,6 +63,7 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
 
         showBtnAddUser(showBtnAddUser)
         showBtnBack(showBtnBack)
+        showBtnOffAllServer(showBtnOffAllServer)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,6 +89,10 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
 
     fun showBtnBack(status : Boolean) {
         (activity as MainActivity).showBtnBack(status)
+    }
+
+    fun showBtnOffAllServer(status : Boolean) {
+        (activity as MainActivity).showBtnOffAllServer(status)
     }
 
     inline fun <reified T> readArguments(

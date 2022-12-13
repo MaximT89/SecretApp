@@ -235,6 +235,13 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun disableAllServers() {
+        dispatchers.launchBackground(viewModelScope){
+            _listServerClients.value?.forEach { client ->
+                client?.redBtnClick()
+            }
+        }
+    }
 }
 
 sealed class MainScreenState {

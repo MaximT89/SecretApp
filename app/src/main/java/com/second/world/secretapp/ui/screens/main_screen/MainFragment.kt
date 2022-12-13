@@ -8,6 +8,7 @@ import com.second.world.secretapp.core.extension.show
 import com.second.world.secretapp.core.navigation.Destinations
 import com.second.world.secretapp.data.server_feature.remote.common.model.response.ResponseMainScreen
 import com.second.world.secretapp.databinding.FragmentMainBinding
+import com.second.world.secretapp.ui.main_activity.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,6 +18,8 @@ class MainFragment :
 
     private val adapter = MainAdapter()
 
+    override val showBtnOffAllServer : Boolean = true
+
     companion object {
         const val NEXT_SCREEN_CONN_KEY = "next_screen_conn_key"
     }
@@ -25,6 +28,22 @@ class MainFragment :
         showTitle(true)
 
         mainRecyclerView.adapter = adapter
+
+        (activity as MainActivity).clickBtnOffAllServer {
+
+            alertDialog(titleAlert = "ВНИМАНИЕ!",
+                bodyText = "ОТКЛЮЧИТЬ ВСЕ?",
+                positiveBtnLogic = {
+
+                    alertDialog(titleAlert = "ВНИМАНИЕ!",
+                        bodyText = "ВЫ УВЕРЕНЫ?",
+                        positiveBtnLogic = {
+                            viewModel.disableAllServers()
+                        })
+
+                }
+            )
+        }
     }
 
     override fun initCallbacks() {

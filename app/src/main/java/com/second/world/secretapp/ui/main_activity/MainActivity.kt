@@ -73,6 +73,12 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    fun clickBtnOffAllServer(btnOffAllServersClick: () -> Unit) {
+        binding.btnOffAllServers.click {
+            btnOffAllServersClick.invoke()
+        }
+    }
+
     fun showNotificationVersion(status: Boolean) {
 
         log(tag = "VERSION", message = "showNotificationVersion work and new status : $status")
@@ -93,9 +99,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun initObservers() = with(viewModel) {
-
-    }
+    private fun initObservers() = with(viewModel) {}
 
     fun updateTitle(title: String) {
         updateText(binding.titleText, title)
@@ -108,6 +112,11 @@ class MainActivity : BaseActivity() {
     fun showBtnAddUser(visibility: Boolean) {
         if (visibility) binding.btnAddUser.show()
         else binding.btnAddUser.hide()
+    }
+
+    fun showBtnOffAllServer(visibility: Boolean) {
+        if (visibility) binding.btnOffAllServers.show()
+        else binding.btnOffAllServers.hide()
     }
 
     fun showTitleField(visibility: Boolean) {

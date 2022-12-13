@@ -3,6 +3,7 @@ package com.second.world.secretapp.ui.screens.users_all_screen
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.second.world.secretapp.core.bases.BaseFragment
+import com.second.world.secretapp.core.extension.click
 import com.second.world.secretapp.core.extension.hide
 import com.second.world.secretapp.core.extension.show
 import com.second.world.secretapp.core.navigation.Destinations
@@ -78,7 +79,7 @@ class UsersAllFragment :
         showError: Boolean = false,
         errorText: String = "",
         showListUsers: Boolean = false,
-        response: ResponseUsersAll? = null
+        response: ResponseUsersAll? = null,
     ) = with(binding) {
 
         if (showProgress) progressBar.show()
